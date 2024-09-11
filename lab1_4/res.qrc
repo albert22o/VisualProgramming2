@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/figure">
+        <file>img/circle.png</file>
+        <file>img/rectangle.jfif</file>
+        <file>img/rhombus.jpg</file>
+        <file>img/sector.png</file>
+        <file>img/square.png</file>
+        <file>img/trapezoid.jpg</file>
+        <file>img/triangle.jpg</file>
+        <file>img/place_holder.jpg</file>
+        <file>img/p.jfif</file>
+    </qresource>
+</RCC>
