@@ -1,27 +1,14 @@
 #include "adminpanel.h"
 #include "ui_adminpanel.h"
-#include <QApplication>
-#include <QMainWindow>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QWidget>
-#include <QTableWidget>
-#include <QTableWidgetItem>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
-#include <QComboBox>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QHeaderView>
-#include <QtDebug>
-
 
 AdminPanel::AdminPanel(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::AdminPanel)
+    ui(new Ui::AdminPanel),
+    computerTable(nullptr),
+    sessionInfo(nullptr)
 {
     ui->setupUi(this);
+    setWindowTitle("Панель администратора");
     resize(800, 600);
 
     // Central Widget
@@ -30,14 +17,16 @@ AdminPanel::AdminPanel(QWidget *parent) :
 
     // Create and add widgets
     mainLayout->addLayout(createSearchBar());
-    mainLayout->addWidget(createComputerTable());
-    mainLayout->addWidget(createSessionInfo());
+    computerTable = createComputerTable();
+    mainLayout->addWidget(computerTable);
+    sessionInfo = createSessionInfo();
+    mainLayout->addWidget(sessionInfo);
     mainLayout->addLayout(createActionButtons());
 
     setCentralWidget(centralWidget);
 
     // Status Bar
-    QStatusBar *statusBar = new QStatusBar(this);
+    statusBar = new QStatusBar(this);
     setStatusBar(statusBar);
     statusBar->showMessage("Готово");
 }
@@ -73,29 +62,35 @@ QHBoxLayout* AdminPanel::createSearchBar()
 
 QTableWidget* AdminPanel::createComputerTable()
 {
-    QTableWidget *computerTable = new QTableWidget(10, 3);
-    computerTable->setHorizontalHeaderLabels({"Компьютер", "Статус", "Время"});
-    computerTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    QTableWidget *table = new QTableWidget(10, 3);
+    table->setHorizontalHeaderLabels({"Компьютер", "Статус", "Время"});
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     for (int i = 0; i < 10; ++i) {
-        computerTable->setItem(i, 0, new QTableWidgetItem("Компьютер " + QString::number(i + 1)));
-        computerTable->setItem(i, 1, new QTableWidgetItem(i % 2 == 0 ? "Свободен" : "Занят"));
-        computerTable->setItem(i, 2, new QTableWidgetItem("00:00"));
+        table->setItem(i, 0, new QTableWidgetItem("Компьютер " + QString::number(i + 1)));
+        table->setItem(i, 1, new QTableWidgetItem(i % 2 == 0 ? "Свободен" : "Занят"));
+        table->setItem(i, 2, new QTableWidgetItem(i % 2 == 0 ? "00:00" : "02:15"));
     }
 
-    connect(computerTable, &QTableWidget::cellClicked, this, [](int row, int column) {
-        qDebug() << "Clicked cell at row:" << row << "column:" << column;
+    connect(table, &QTableWidget::cellClicked, this, [this, table](int row, int /*column*/) {
+        QString computerName = table->item(row, 0)->text();
+        QString status = table->item(row, 1)->text();
+        QString time = table->item(row, 2)->text();
+
+        sessionInfo->setText(QString("Информация о сеансе: %1 | Статус: %2 | Время: %3")
+                                 .arg(computerName, status, time));
+        selectedRow = row;
     });
 
-    return computerTable;
+    return table;
 }
 
 QLabel* AdminPanel::createSessionInfo()
 {
-    QLabel *sessionInfo = new QLabel("Информация о сеансе: Выберите компьютер из списка.");
-    sessionInfo->setStyleSheet("font-weight: bold; padding: 5px;");
-    sessionInfo->setAlignment(Qt::AlignLeft);
-    return sessionInfo;
+    QLabel *info = new QLabel("Информация о сеансе: Выберите компьютер из списка.");
+    info->setStyleSheet("font-weight: bold; padding: 5px;");
+    info->setAlignment(Qt::AlignLeft);
+    return info;
 }
 
 QHBoxLayout* AdminPanel::createActionButtons()
@@ -114,18 +109,44 @@ QHBoxLayout* AdminPanel::createActionButtons()
     actionsLayout->addWidget(startSessionButton);
     actionsLayout->addWidget(endSessionButton);
 
-    // Signal-slot connections (to be implemented)
+    // Signal-slot connections
     connect(registerButton, &QPushButton::clicked, this, []() {
         qDebug() << "Register button clicked!";
     });
     connect(startSessionButton, &QPushButton::clicked, this, []() {
         qDebug() << "Start session button clicked!";
     });
-    connect(endSessionButton, &QPushButton::clicked, this, []() {
-        qDebug() << "End session button clicked!";
-    });
+    connect(endSessionButton, &QPushButton::clicked, this, &AdminPanel::endSession);
 
     return actionsLayout;
+}
+
+void AdminPanel::endSession()
+{
+    if (selectedRow < 0 || !computerTable) {
+        QMessageBox::warning(this, "Ошибка", "Выберите компьютер из списка для завершения сеанса.");
+        return;
+    }
+
+    QTableWidgetItem *statusItem = computerTable->item(selectedRow, 1);
+    QTableWidgetItem *timeItem = computerTable->item(selectedRow, 2);
+
+    if (statusItem->text() != "Занят") {
+        QMessageBox::information(this, "Информация", "Выбранный компьютер уже свободен.");
+        return;
+    }
+
+    // Update status and time
+    statusItem->setText("Свободен");
+    timeItem->setText("00:00");
+
+    // Update session info
+    sessionInfo->setText(QString("Сеанс завершен для компьютера %1.").arg(computerTable->item(selectedRow, 0)->text()));
+
+    // Update status bar
+    statusBar->showMessage(QString("Сеанс завершен для компьютера %1").arg(computerTable->item(selectedRow, 0)->text()));
+
+    selectedRow = -1; // Reset selection
 }
 
 AdminPanel::~AdminPanel()
