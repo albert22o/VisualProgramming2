@@ -13,70 +13,119 @@
 #include <QComboBox>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QHeaderView>
+#include <QtDebug>
+
 
 AdminPanel::AdminPanel(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::AdminPanel)
 {
-    {
-            ui->setupUi(this);
-            setWindowTitle("Панель администратора");
-            resize(800, 600);
+    ui->setupUi(this);
+    resize(800, 600);
 
-            // Создание центрального виджета
-            QWidget *centralWidget = new QWidget(this);
-            QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+    // Central Widget
+    QWidget *centralWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
 
-            // Строка поиска и фильтры
-            QHBoxLayout *searchLayout = new QHBoxLayout();
-            QLineEdit *searchBox = new QLineEdit();
-            searchBox->setPlaceholderText("Поиск клиента или компьютера...");
-            QComboBox *filterCombo = new QComboBox();
-            filterCombo->addItem("Все");
-            filterCombo->addItem("Свободен");
-            filterCombo->addItem("Занят");
-            QPushButton *searchButton = new QPushButton("Поиск");
+    // Create and add widgets
+    mainLayout->addLayout(createSearchBar());
+    mainLayout->addWidget(createComputerTable());
+    mainLayout->addWidget(createSessionInfo());
+    mainLayout->addLayout(createActionButtons());
 
-            searchLayout->addWidget(searchBox);
-            searchLayout->addWidget(filterCombo);
-            searchLayout->addWidget(searchButton);
+    setCentralWidget(centralWidget);
 
-            // Список компьютеров
-            QTableWidget *computerTable = new QTableWidget(10, 3); // 10 строк, 3 столбца
-            computerTable->setHorizontalHeaderLabels({"Компьютер", "Статус", "Время"});
-            for (int i = 0; i < 10; ++i) {
-                computerTable->setItem(i, 0, new QTableWidgetItem("Компьютер " + QString::number(i + 1)));
-                computerTable->setItem(i, 1, new QTableWidgetItem(i % 2 == 0 ? "Свободен" : "Занят"));
-                computerTable->setItem(i, 2, new QTableWidgetItem("00:00"));
-            }
+    // Status Bar
+    QStatusBar *statusBar = new QStatusBar(this);
+    setStatusBar(statusBar);
+    statusBar->showMessage("Готово");
+}
 
-            // Панель информации о сеансе
-            QLabel *sessionInfo = new QLabel("Информация о сеансе: Выберите компьютер из списка.");
-            sessionInfo->setStyleSheet("font-weight: bold; padding: 5px;");
+QHBoxLayout* AdminPanel::createSearchBar()
+{
+    QHBoxLayout *searchLayout = new QHBoxLayout();
 
-            // Быстрые действия
-            QHBoxLayout *actionsLayout = new QHBoxLayout();
-            QPushButton *registerButton = new QPushButton("Зарегистрировать клиента");
-            QPushButton *startSessionButton = new QPushButton("Начать сеанс");
-            QPushButton *endSessionButton = new QPushButton("Завершить сеанс");
+    QLineEdit *searchBox = new QLineEdit();
+    searchBox->setPlaceholderText("Поиск клиента или компьютера...");
+    searchBox->setToolTip("Введите имя клиента или номер компьютера для поиска");
 
-            actionsLayout->addWidget(registerButton);
-            actionsLayout->addWidget(startSessionButton);
-            actionsLayout->addWidget(endSessionButton);
+    QComboBox *filterCombo = new QComboBox();
+    filterCombo->addItem("Все");
+    filterCombo->addItem("Свободен");
+    filterCombo->addItem("Занят");
+    filterCombo->setToolTip("Фильтровать компьютеры по статусу");
 
-            // Компоновка виджетов
-            mainLayout->addLayout(searchLayout);
-            mainLayout->addWidget(computerTable);
-            mainLayout->addWidget(sessionInfo);
-            mainLayout->addLayout(actionsLayout);
+    QPushButton *searchButton = new QPushButton("Поиск");
+    searchButton->setToolTip("Нажмите для выполнения поиска");
 
-            setCentralWidget(centralWidget);
+    searchLayout->addWidget(searchBox);
+    searchLayout->addWidget(filterCombo);
+    searchLayout->addWidget(searchButton);
 
-            // Строка состояния
-            QStatusBar *statusBar = new QStatusBar(this);
-            setStatusBar(statusBar);
-            statusBar->showMessage("Готово");
-        }
+    // Signal-slot connection (to be implemented)
+    connect(searchButton, &QPushButton::clicked, this, []() {
+        qDebug() << "Search button clicked!";
+    });
+
+    return searchLayout;
+}
+
+QTableWidget* AdminPanel::createComputerTable()
+{
+    QTableWidget *computerTable = new QTableWidget(10, 3);
+    computerTable->setHorizontalHeaderLabels({"Компьютер", "Статус", "Время"});
+    computerTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    for (int i = 0; i < 10; ++i) {
+        computerTable->setItem(i, 0, new QTableWidgetItem("Компьютер " + QString::number(i + 1)));
+        computerTable->setItem(i, 1, new QTableWidgetItem(i % 2 == 0 ? "Свободен" : "Занят"));
+        computerTable->setItem(i, 2, new QTableWidgetItem("00:00"));
+    }
+
+    connect(computerTable, &QTableWidget::cellClicked, this, [](int row, int column) {
+        qDebug() << "Clicked cell at row:" << row << "column:" << column;
+    });
+
+    return computerTable;
+}
+
+QLabel* AdminPanel::createSessionInfo()
+{
+    QLabel *sessionInfo = new QLabel("Информация о сеансе: Выберите компьютер из списка.");
+    sessionInfo->setStyleSheet("font-weight: bold; padding: 5px;");
+    sessionInfo->setAlignment(Qt::AlignLeft);
+    return sessionInfo;
+}
+
+QHBoxLayout* AdminPanel::createActionButtons()
+{
+    QHBoxLayout *actionsLayout = new QHBoxLayout();
+
+    QPushButton *registerButton = new QPushButton("Зарегистрировать клиента");
+    QPushButton *startSessionButton = new QPushButton("Начать сеанс");
+    QPushButton *endSessionButton = new QPushButton("Завершить сеанс");
+
+    registerButton->setToolTip("Добавить нового клиента в систему");
+    startSessionButton->setToolTip("Запустить сеанс для выбранного компьютера");
+    endSessionButton->setToolTip("Завершить текущий сеанс");
+
+    actionsLayout->addWidget(registerButton);
+    actionsLayout->addWidget(startSessionButton);
+    actionsLayout->addWidget(endSessionButton);
+
+    // Signal-slot connections (to be implemented)
+    connect(registerButton, &QPushButton::clicked, this, []() {
+        qDebug() << "Register button clicked!";
+    });
+    connect(startSessionButton, &QPushButton::clicked, this, []() {
+        qDebug() << "Start session button clicked!";
+    });
+    connect(endSessionButton, &QPushButton::clicked, this, []() {
+        qDebug() << "End session button clicked!";
+    });
+
+    return actionsLayout;
 }
 
 AdminPanel::~AdminPanel()

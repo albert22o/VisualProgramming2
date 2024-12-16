@@ -2,7 +2,9 @@
 #define ADMINPANEL_H
 
 #include <QMainWindow>
-
+#include <QHBoxLayout>
+#include <QTableWidget>
+#include <QLabel>
 namespace Ui {
 class AdminPanel;
 }
@@ -13,6 +15,10 @@ class AdminPanel : public QMainWindow
 
 public:
     explicit AdminPanel(QWidget *parent = nullptr);
+    QHBoxLayout* createActionButtons();
+    QHBoxLayout* createSearchBar();
+    QTableWidget* createComputerTable();
+    QLabel* createSessionInfo();
     ~AdminPanel();
 
 private:
