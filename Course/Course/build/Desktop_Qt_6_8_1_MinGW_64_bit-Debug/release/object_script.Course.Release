@@ -1,0 +1,17 @@
+release/basetableshema.o
+release/closedsessionsshema.o
+release/computershema.o
+release/computerstatuses.o
+release/sessionshema.o
+release/usershema.o
+release/dbseeder.o
+release/computer.o
+release/entity.o
+release/session.o
+release/user.o
+release/baserepository.o
+release/computersrepository.o
+release/usersrepository.o
+release/main.o
+release/adminpanel.o
+release/moc_adminpanel.o

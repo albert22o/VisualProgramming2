@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,10 +26,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        Database/TableShemas/basetableshema.cpp \
+        Database/TableShemas/closedsessionsshema.cpp \
+        Database/TableShemas/computershema.cpp \
+        Database/TableShemas/computerstatuses.cpp \
+        Database/TableShemas/sessionshema.cpp \
+        Database/TableShemas/usershema.cpp \
+        Database/dbseeder.cpp \
+        Domain/computer.cpp \
+        Domain/entity.cpp \
+        Domain/session.cpp \
+        Domain/user.cpp \
+        Repositories/baserepository.cpp \
+        Repositories/computersrepository.cpp \
+        Repositories/usersrepository.cpp \
         main.cpp \
         adminpanel.cpp
 
 HEADERS += \
+        Database/TableShemas/basetableshema.h \
+        Database/TableShemas/closedsessionsshema.h \
+        Database/TableShemas/computershema.h \
+        Database/TableShemas/computerstatuses.h \
+        Database/TableShemas/sessionshema.h \
+        Database/TableShemas/usershema.h \
+        Database/dbseeder.h \
+        Domain/computer.h \
+        Domain/entity.h \
+        Domain/session.h \
+        Domain/user.h \
+        Repositories/baserepository.h \
+        Repositories/computersrepository.h \
+        Repositories/usersrepository.h \
         adminpanel.h
 
 FORMS += \

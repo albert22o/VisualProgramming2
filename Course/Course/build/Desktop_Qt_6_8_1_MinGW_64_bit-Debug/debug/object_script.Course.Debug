@@ -1,0 +1,17 @@
+debug/basetableshema.o
+debug/closedsessionsshema.o
+debug/computershema.o
+debug/computerstatuses.o
+debug/sessionshema.o
+debug/usershema.o
+debug/dbseeder.o
+debug/computer.o
+debug/entity.o
+debug/session.o
+debug/user.o
+debug/baserepository.o
+debug/computersrepository.o
+debug/usersrepository.o
+debug/main.o
+debug/adminpanel.o
+debug/moc_adminpanel.o
