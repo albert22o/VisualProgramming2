@@ -9,6 +9,7 @@ class Computer : public Entity
 {
 public:
     Computer();
+    Computer(int id, QString name, QString status);
 
     QString Name;
     QString Status;

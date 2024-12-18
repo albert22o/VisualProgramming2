@@ -9,9 +9,11 @@ class Session : public Entity
 {
 public:
     Session();
+    Session(int id, QString startTime, QString endTime, QString status, int userId, int computerId);
 
     QString StartOfLease;
     QString EndOfLease;
+    QString Status;
     int UserId;
     int ComputerId;
 };

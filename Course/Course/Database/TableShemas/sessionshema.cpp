@@ -6,7 +6,7 @@ SessionShema::SessionShema() {}
 QString SessionShema::AsString(){
 
     QString createTableQuery = R"(
-        CREATE TABLE IF NOT EXISTS ActiveSessions (
+        CREATE TABLE IF NOT EXISTS Sessions (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             StartTime VARCHAR(255) NOT NULL,
             EndTime VARCHAR(255) NOT NULL,

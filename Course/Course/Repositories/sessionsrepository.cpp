@@ -1,0 +1,151 @@
+#include "sessionsrepository.h"
+
+#include <QSqlQuery>
+#include <QSqlError>
+
+SessionsRepository::SessionsRepository() {}
+
+
+QString SessionsRepository::ParseStatusFrom(SessionStatus status){
+
+    if(status == SessionStatus::Active){
+        return "Active";
+    }
+
+    return "Closed";
+}
+
+Session SessionsRepository::GetById(int id){
+
+    OpenConnection();
+
+    Session session;
+
+    QSqlQuery query;
+
+    query.prepare("SELECT Id, StartTime, EndTime, UserId, ComputerId FROM Sessions WHERE Id = :id");
+    query.bindValue(":id", id);
+
+    if (query.exec()) {
+
+        if (query.next()) {
+
+            session.Id = query.value("Id").toInt();
+            session.StartOfLease = query.value("StartOfLease").toString();
+            session.EndOfLease = query.value("EndOfLease").toString();
+            session.UserId = query.value("UserId").toInt();
+            session.ComputerId = query.value("ComputerId").toInt();
+
+        }
+        else {
+            throw std::runtime_error(query.lastError().text().toStdString());
+        }
+    }
+    else {
+        throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    CloseConnection();
+
+    return session;
+}
+
+QList<Session> SessionsRepository::GetAll(){
+
+    OpenConnection();
+
+    QSqlQuery query("SELECT * FROM Sessions");
+
+    if (!query.exec()) {
+        throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    QList<Session> sessions;
+
+    while (query.next()) {
+
+        int id = query.value(0).toInt();
+        QString startTime = query.value(1).toString();
+        QString endTime = query.value(2).toString();
+        int userId = query.value(3).toInt();
+        int computerId =   query.value(4).toInt();
+
+        sessions.append(Session(id, startTime, endTime, userId, computerId));
+    }
+
+    CloseConnection();
+
+    return sessions;
+}
+
+int SessionsRepository::AddRecord(Session record){
+
+    OpenConnection();
+
+    QSqlQuery query;
+
+    query.prepare(R"(
+        INSERT INTO Sessions (startTime, endTime, userId, computerId)
+        VALUES (:startTime, :endTime, :userId, :computerId)
+    )");
+
+    query.bindValue(":startTime", record.StartOfLease);
+    query.bindValue(":endTime", record.EndOfLease);
+    query.bindValue(":userId", record.UserId);
+    query.bindValue(":computerId", record.ComputerId);
+
+    if (!query.exec()) {
+        throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    auto id = query.lastInsertId().toInt();
+
+    CloseConnection();
+
+    return id;
+}
+
+void SessionsRepository::UpdateRecord(Session record){
+
+    OpenConnection();
+
+    QSqlQuery query;
+
+    query.prepare("UPDATE Sessions SET StartTime = :startOfLease, EndTime = :endOfLease, UserId = :userId, ComputerId = :computerId  WHERE Id = :id");
+
+    query.bindValue(":startOfLease", record.StartOfLease);
+    query.bindValue(":endOfLease", record.EndOfLease);
+    query.bindValue(":userId", record.UserId);
+    query.bindValue(":computerId", record.ComputerId);
+    query.bindValue(":id", record.Id);
+
+    if (!query.exec()) {
+        throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    CloseConnection();
+}
+
+void SessionsRepository::AddRecords(QList<Session> records){
+    throw std::runtime_error("Не релизованный метод");
+}
+
+void SessionsRepository::DeleteById(int id){
+    OpenConnection();
+
+    QSqlQuery query;
+
+    query.prepare("DELETE FROM Sessions WHERE Id = :id");
+
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    CloseConnection();
+}
+
+void SessionsRepository::DeleteManyById(QList<int> idCollection){
+    throw std::runtime_error("Не релизованный метод");
+}

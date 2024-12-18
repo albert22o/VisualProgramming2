@@ -27,7 +27,6 @@ CONFIG += c++11
 
 SOURCES += \
         Database/TableShemas/basetableshema.cpp \
-        Database/TableShemas/closedsessionsshema.cpp \
         Database/TableShemas/computershema.cpp \
         Database/TableShemas/computerstatuses.cpp \
         Database/TableShemas/sessionshema.cpp \
@@ -39,13 +38,13 @@ SOURCES += \
         Domain/user.cpp \
         Repositories/baserepository.cpp \
         Repositories/computersrepository.cpp \
+        Repositories/sessionsrepository.cpp \
         Repositories/usersrepository.cpp \
         main.cpp \
         adminpanel.cpp
 
 HEADERS += \
         Database/TableShemas/basetableshema.h \
-        Database/TableShemas/closedsessionsshema.h \
         Database/TableShemas/computershema.h \
         Database/TableShemas/computerstatuses.h \
         Database/TableShemas/sessionshema.h \
@@ -57,6 +56,7 @@ HEADERS += \
         Domain/user.h \
         Repositories/baserepository.h \
         Repositories/computersrepository.h \
+        Repositories/sessionsrepository.h \
         Repositories/usersrepository.h \
         adminpanel.h
 

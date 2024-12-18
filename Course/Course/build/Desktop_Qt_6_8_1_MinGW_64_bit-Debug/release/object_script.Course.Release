@@ -11,6 +11,7 @@ release/session.o
 release/user.o
 release/baserepository.o
 release/computersrepository.o
+release/sessionsrepository.o
 release/usersrepository.o
 release/main.o
 release/adminpanel.o

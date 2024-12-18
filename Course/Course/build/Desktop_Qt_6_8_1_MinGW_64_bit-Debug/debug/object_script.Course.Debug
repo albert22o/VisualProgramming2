@@ -11,6 +11,7 @@ debug/session.o
 debug/user.o
 debug/baserepository.o
 debug/computersrepository.o
+debug/sessionsrepository.o
 debug/usersrepository.o
 debug/main.o
 debug/adminpanel.o

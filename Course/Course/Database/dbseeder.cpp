@@ -1,9 +1,8 @@
 #include "dbseeder.h"
 
-#include "TableShemas/closedsessions.h"
-#include "TableShemas/session.h"
-#include "TableShemas/computer.h"
-#include "TableShemas/user.h"
+#include "TableShemas/computershema.h"
+#include "TableShemas/sessionshema.h"
+#include "TableShemas/usershema.h"
 #include "TableShemas/computerstatuses.h"
 
 #include <QSqlQuery>
@@ -66,7 +65,6 @@ void DbSeeder::CreateTablesIfNotExists(){
     CreateTableFromShema(new UserShema());
     CreateTableFromShema(new ComputerShema());
     SeedComputers();
-    CreateTableFromShema(new ClosedSessionsShema());
     CreateTableFromShema(new SessionShema());
 
     CloseDbConnection();
