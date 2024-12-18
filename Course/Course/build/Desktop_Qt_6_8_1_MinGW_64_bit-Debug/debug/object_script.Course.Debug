@@ -1,5 +1,4 @@
 debug/basetableshema.o
-debug/closedsessionsshema.o
 debug/computershema.o
 debug/computerstatuses.o
 debug/sessionshema.o

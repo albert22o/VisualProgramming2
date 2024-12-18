@@ -16,7 +16,9 @@ public:
     SessionsRepository();
 
     QList<Session> GetAllSessionsByStatus(SessionStatus sessionStatus);
-
+    
+    Session GetByComputerId()
+    
     virtual Session GetById(int id) override;
     virtual QList<Session> GetAll() override;
     virtual int AddRecord(Session record) override;

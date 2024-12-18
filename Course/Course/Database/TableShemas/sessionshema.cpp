@@ -10,6 +10,7 @@ QString SessionShema::AsString(){
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             StartTime VARCHAR(255) NOT NULL,
             EndTime VARCHAR(255) NOT NULL,
+            Status VARCHAR(255) NOT NULL,
             UserId INTEGER,
             ComputerId INTEGER,
             FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,

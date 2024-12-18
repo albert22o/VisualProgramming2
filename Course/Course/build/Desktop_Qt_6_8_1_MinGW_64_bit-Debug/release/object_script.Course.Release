@@ -1,5 +1,4 @@
 release/basetableshema.o
-release/closedsessionsshema.o
 release/computershema.o
 release/computerstatuses.o
 release/sessionshema.o
