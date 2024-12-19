@@ -36,6 +36,11 @@ SOURCES += \
         Domain/entity.cpp \
         Domain/session.cpp \
         Domain/user.cpp \
+        PageViewModels/mainpage.cpp \
+        PageViewModels/mainwindow.cpp \
+        PageViewModels/registrationpage.cpp \
+        PageViewModels/sessionshistorypage.cpp \
+        PageViewModels/statisticspage.cpp \
         Repositories/baserepository.cpp \
         Repositories/computersrepository.cpp \
         Repositories/sessionsrepository.cpp \
@@ -54,6 +59,11 @@ HEADERS += \
         Domain/entity.h \
         Domain/session.h \
         Domain/user.h \
+        PageViewModels/mainpage.h \
+        PageViewModels/mainwindow.h \
+        PageViewModels/registrationpage.h \
+        PageViewModels/sessionshistorypage.h \
+        PageViewModels/statisticspage.h \
         Repositories/baserepository.h \
         Repositories/computersrepository.h \
         Repositories/sessionsrepository.h \
@@ -61,6 +71,11 @@ HEADERS += \
         adminpanel.h
 
 FORMS += \
+        PageViewModels/mainpage.ui \
+        PageViewModels/mainwindow.ui \
+        PageViewModels/registrationpage.ui \
+        PageViewModels/sessionshistorypage.ui \
+        PageViewModels/statisticspage.ui \
         adminpanel.ui
 
 # Default rules for deployment.

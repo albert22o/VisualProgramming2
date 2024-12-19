@@ -1,6 +1,9 @@
 #include "adminpanel.h"
 #include "ui_adminpanel.h"
 
+#include "Repositories/computersrepository.h"
+#include "Repositories/sessionsrepository.h"
+
 AdminPanel::AdminPanel(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::AdminPanel),
@@ -65,13 +68,27 @@ QTableWidget* AdminPanel::createComputerTable()
     QTableWidget *table = new QTableWidget(10, 3);
     table->setHorizontalHeaderLabels({"Компьютер", "Статус", "Время"});
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    
+    ComputersRepository repos;
+    auto computers = repos.GetAll();
+    
+    int i = 0;
+    for(auto& comp : computers){
 
-    for (int i = 0; i < 10; ++i) {
-        table->setItem(i, 0, new QTableWidgetItem("Компьютер " + QString::number(i + 1)));
-        table->setItem(i, 1, new QTableWidgetItem(i % 2 == 0 ? "Свободен" : "Занят"));
-        table->setItem(i, 2, new QTableWidgetItem(i % 2 == 0 ? "00:00" : "02:15"));
+        table->setItem(i, 0, new QTableWidgetItem(comp.Name));
+        table->setItem(i, 1, new QTableWidgetItem(comp.Status));
+
+        if(comp.Status == SessionsRepository::ParseStatusFrom(SessionStatus::Active)){
+            auto remainTime = "";
+            table->setItem(i, 2, new QTableWidgetItem(remainTime));
+        }
+        else{
+            table->setItem(i, 2, new QTableWidgetItem("-"));
+        }
+
+        i++;
     }
-
+    
     connect(table, &QTableWidget::cellClicked, this, [this, table](int row, int /*column*/) {
         QString computerName = table->item(row, 0)->text();
         QString status = table->item(row, 1)->text();

@@ -5,15 +5,20 @@
 #include "Repositories/computersrepository.h"
 #include "Repositories/sessionsrepository.h"
 
+#include "PageViewModels/mainwindow.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    AdminPanel w;
+    //AdminPanel w;
 
     DbSeeder dbSeeder;
     dbSeeder.CreateTablesIfNotExists();
 
-    w.show();
+    MainWindow mainWindow;
+    mainWindow.show();
+
+    //w.show();
 
     ComputersRepository repos;
 

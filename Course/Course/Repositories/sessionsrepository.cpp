@@ -5,6 +5,41 @@
 
 SessionsRepository::SessionsRepository() {}
 
+Session SessionsRepository::GetSessionByComputerId(int id){
+
+    OpenConnection();
+
+    Session session;
+
+    QSqlQuery query;
+
+    query.prepare("SELECT Id, StartTime, EndTime, UserId, ComputerId FROM Sessions WHERE ComputerId = :id");
+    query.bindValue(":id", id);
+
+    if (query.exec()) {
+
+        if (query.next()) {
+
+            session.Id = query.value("Id").toInt();
+            session.StartOfLease = query.value("StartOfLease").toString();
+            session.EndOfLease = query.value("EndOfLease").toString();
+            session.UserId = query.value("UserId").toInt();
+            session.ComputerId = query.value("ComputerId").toInt();
+
+        }
+        else {
+            throw std::runtime_error(query.lastError().text().toStdString());
+        }
+    }
+    else {
+        throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    CloseConnection();
+
+    return session;
+}
+
 QList<Session> SessionsRepository::GetAllSessionsByStatus(SessionStatus sessionStatus){
 
     OpenConnection();
