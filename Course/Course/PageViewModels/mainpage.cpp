@@ -4,15 +4,15 @@
 #include <QPoint>
 #include <QMouseEvent>
 
-#include "Repositories/computersrepository.h"
-#include "Repositories/sessionsrepository.h"
-
 #include "PageViewModels/newseanswindow.h"
 #include "Database/TableShemas/computerstatuses.h"
 
-MainPage::MainPage(QWidget *parent)
+MainPage::MainPage(QSqlDatabase& database, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::MainPage)
+    , ui(new Ui::MainPage),
+    computerRepos(database),
+    sessionRepos(database),
+    usersRepos(database)
 {
     ui->setupUi(this);
 
@@ -27,7 +27,7 @@ void MainPage::ConnectWithComputerViewModel(ComputerViewModel* computerViewModel
 
 void MainPage::OnComputerLeaseTimeChanged(const Computer &computer, int updatedTime){
 
-    auto item = ui->tableWidget->item(computer.Id, 3);
+    auto item = ui->tableWidget->item(computer.Id - 1, 3);
     auto remainTime = ToDayHoursMinutesView(updatedTime);
 
     item->setText(remainTime);
@@ -35,14 +35,23 @@ void MainPage::OnComputerLeaseTimeChanged(const Computer &computer, int updatedT
 
 void MainPage::OnComputerLeaseFinished(const Computer &computer){
 
-    auto timeItem = ui->tableWidget->item(computer.Id, 3);
-    timeItem->setText("---");
+    auto timeItem = ui->tableWidget->item(computer.Id - 1, 3);
+    timeItem->setText("-");
 
-    auto statusItem = ui->tableWidget->item(computer.Id, 1);
-    statusItem->setText("Free");
+    auto statusItem = ui->tableWidget->item(computer.Id - 1, 1);
+    statusItem->setText(ComputerStatuses::Free());
+
+    auto updatedComputer = computer;
+    updatedComputer.Status = ComputerStatuses::Free();
+    computerRepos.UpdateRecord(updatedComputer);
+
+    auto session = sessionRepos.GetSessionByComputerId(computer.Id);
+    session.Status = SessionsRepository::ParseStatusFrom(SessionStatus::Closed);
+    sessionRepos.UpdateRecord(session);
 }
 
 void MainPage::Setup(){
+
     GetComputers();
     CreateComputerTable();
     ui->sessionInfo->setText("Выберете свободный компьютер");
@@ -61,8 +70,7 @@ void MainPage::mouseReleaseEvent(QMouseEvent *event){
 
 void MainPage::GetComputers(){
 
-    ComputersRepository repos;
-    auto computers = repos.GetAll();
+    auto computers = computerRepos.GetAll();
 
     int i = 0;
 
@@ -70,6 +78,13 @@ void MainPage::GetComputers(){
         auto compViewModel = new ComputerViewModel(comp);
         ConnectWithComputerViewModel(compViewModel);
         tableIdToComputer[i] = compViewModel;
+
+        if(comp.Status == ComputerStatuses::Busy()){
+
+            auto activeSession = sessionRepos.GetSessionByComputerId(comp.Id);
+            compViewModel->StartTimer(activeSession.GetTimeDiffrenceInMinuters(QDateTime::currentDateTime()));
+        }
+
         i++;
     }
 }
@@ -90,8 +105,6 @@ void MainPage::CreateComputerTable(){
     ui->tableWidget->setHorizontalHeaderLabels({"Компьютер", "Статус", "Тариф", "Время"});
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    SessionsRepository repos;
-
     for(auto& rowId : tableIdToComputer.keys()) {
 
         auto comp = tableIdToComputer[rowId]->GetComputer();
@@ -102,9 +115,9 @@ void MainPage::CreateComputerTable(){
         ui->tableWidget->setItem(rowId, 1, new QTableWidgetItem(comp.Status));
         ui->tableWidget->setItem(rowId, 2, new QTableWidgetItem(ComputerRateConverter::ParseRate(comp.Rate)));
 
-        if(comp.Status == SessionsRepository::ParseStatusFrom(SessionStatus::Active)) {
+        if(comp.Status == ComputerStatuses::Busy()) {
 
-            auto activeSession = repos.GetSessionByComputerId(comp.Id);
+            auto activeSession = sessionRepos.GetSessionByComputerId(comp.Id);
             auto remainTimeInMinutes = activeSession.GetTimeDiffrenceInMinuters(QDateTime::currentDateTime());
 
             auto remainTime = ToDayHoursMinutesView(remainTimeInMinutes);
@@ -141,10 +154,30 @@ void MainPage::on_startSession_clicked()
     QTableWidgetItem* currentItem = ui->tableWidget->currentItem();
 
     if(currentItem != nullptr){
+
         int computerId = currentItem->row();
-        NewSeansWindow newSeansDialog(tableIdToComputer[computerId]->GetComputer());
-        newSeansDialog.exec();
+
+        auto computer = tableIdToComputer[computerId]->GetComputer();
+
+        NewSeansWindow *newSeansDialog = new NewSeansWindow
+        (
+            usersRepos,
+            sessionRepos,
+            computerRepos,
+            computer
+        );
+
+        connect(newSeansDialog, &NewSeansWindow::SessionStarted, this, &MainPage::OnNewSessionStarted);
+        newSeansDialog->exec();
     }
+}
+
+void MainPage::OnNewSessionStarted(Session &session, const Computer& computer){
+
+    ui->tableWidget->setItem(computer.Id - 1, 1, new QTableWidgetItem(computer.Status));
+    ui->tableWidget->setItem(computer.Id - 1, 3, new QTableWidgetItem(ToDayHoursMinutesView(session.GetTimeDiffrenceInMinuters())));
+
+    tableIdToComputer[computer.Id - 1]->StartTimer(session.GetTimeDiffrenceInMinuters());
 }
 
 QString MainPage::ToDayHoursMinutesView(int minutes){
@@ -153,7 +186,7 @@ QString MainPage::ToDayHoursMinutesView(int minutes){
     int hours = (minutes % (24 * 60)) / 60;
     int min = minutes % 60;
 
-    QString result;
+    QString result = "";
 
     if (days > 0) {
         result.append(QString("%1 дн.").arg(days));

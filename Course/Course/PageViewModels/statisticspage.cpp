@@ -5,9 +5,11 @@
 
 #include "Database/TableShemas/computerrates.h"
 
-StatisticsPage::StatisticsPage(QWidget *parent)
+StatisticsPage::StatisticsPage(QSqlDatabase& db, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::StatisticsPage)
+    , ui(new Ui::StatisticsPage),
+    repos(db)
+
 {
     ui->setupUi(this);
 

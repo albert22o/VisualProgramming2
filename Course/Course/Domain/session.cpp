@@ -12,6 +12,21 @@ Session::Session(int id, QString startTime, QString endTime, QString status, int
     Status = status;
 }
 
+int Session::GetTimeDiffrenceInSeconds(QDateTime startTime){
+
+    QString format = "dd.MM.yyyy/HH:mm";
+
+    QDateTime endOfLease = QDateTime::fromString(this->EndOfLease, format);
+
+    if (!endOfLease.isValid()) {
+        return -1;
+    }
+
+    qint64 secondsDifference = startTime.secsTo(endOfLease);
+
+    return secondsDifference;
+}
+
 int Session::GetTimeDiffrenceInMinuters(QDateTime startTime){
 
     QString format = "dd.MM.yyyy/HH:mm";

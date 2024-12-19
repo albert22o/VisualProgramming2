@@ -14,7 +14,7 @@ enum SessionStatus{
 class SessionsRepository : public BaseRepository<Session>
 {
 public:
-    SessionsRepository();
+    SessionsRepository(QSqlDatabase& db);
 
     Session GetSessionByComputerId(int id);
     QList<Session> GetAllSessionsByStatus(SessionStatus sessionStatus);

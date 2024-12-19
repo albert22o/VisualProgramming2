@@ -4,21 +4,21 @@
 #include <QTabWidget>
 #include <QMouseEvent>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QSqlDatabase& db, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    Setup();
+    Setup(db);
 }
 
-void MainWindow::Setup(){
+void MainWindow::Setup(QSqlDatabase& db){
 
-    mainPage = new MainPage();
-    registrationPage = new RegistrationPage();
-    sessionHistoryPage = new SessionsHistoryPage();
-    statisticsPage = new StatisticsPage();
+    mainPage = new MainPage(db);
+    registrationPage = new RegistrationPage(db);
+    sessionHistoryPage = new SessionsHistoryPage(db);
+    statisticsPage = new StatisticsPage(db);
 
     ui->tabWidget->addTab(mainPage, "Главная");
     ui->tabWidget->addTab(registrationPage, "Регистрация");

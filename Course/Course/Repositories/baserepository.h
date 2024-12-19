@@ -8,10 +8,11 @@ template <typename T>
 class BaseRepository
 {    
 protected:
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase db;
 
     void OpenConnection(){
         if(!db.open()){
+            QString errorMsg = QString("Failed to open database: %1").arg(db.lastError().text());
             throw std::runtime_error(db.lastError().text().toStdString());
             return;
         }
@@ -23,8 +24,8 @@ protected:
 
 public:
 
-    BaseRepository(){
-        db.setDatabaseName("computer_club.db");
+    BaseRepository(QSqlDatabase db){
+        this->db = db;
     }
 
     virtual T GetById(int id) = 0;

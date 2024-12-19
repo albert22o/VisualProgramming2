@@ -7,7 +7,7 @@
 class UsersRepository : public BaseRepository<User>
 {
 public:
-    UsersRepository();
+    UsersRepository(QSqlDatabase& db);
 
 
     bool IsUserExists(const QString& login);

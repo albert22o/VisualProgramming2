@@ -2,7 +2,7 @@
 
 #include <QSqlQuery>
 
-UsersRepository::UsersRepository() {}
+UsersRepository::UsersRepository(QSqlDatabase& db) : BaseRepository(db) {}
 
 
 bool UsersRepository::IsUserExists(const QString& login){

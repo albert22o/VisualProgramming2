@@ -4,7 +4,9 @@
 
 #include "Domain/computer.h"
 
-ComputersRepository::ComputersRepository() {}
+ComputersRepository::ComputersRepository(QSqlDatabase& db) : BaseRepository(db)  {
+
+}
 
 Computer ComputersRepository::GetById(int id){
 

@@ -17,7 +17,7 @@ class StatisticsPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit StatisticsPage(QWidget *parent = nullptr);
+    explicit StatisticsPage(QSqlDatabase& db, QWidget *parent = nullptr);
     ~StatisticsPage();
 
 private:

@@ -3,7 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-SessionsRepository::SessionsRepository() {}
+SessionsRepository::SessionsRepository(QSqlDatabase& db) : BaseRepository(db) {}
 
 QList<Session> SessionsRepository::GetSessionsByComputerRate(ComputerRate compRate, SessionStatus sessionStatus){
 
@@ -60,8 +60,8 @@ Session SessionsRepository::GetSessionByComputerId(int id){
         if (query.next()) {
 
             session.Id = query.value("Id").toInt();
-            session.StartOfLease = query.value("StartOfLease").toString();
-            session.EndOfLease = query.value("EndOfLease").toString();
+            session.StartOfLease = query.value("StartTime").toString();
+            session.EndOfLease = query.value("EndTime").toString();
             session.UserId = query.value("UserId").toInt();
             session.ComputerId = query.value("ComputerId").toInt();
 
@@ -217,12 +217,13 @@ void SessionsRepository::UpdateRecord(Session record){
 
     QSqlQuery query;
 
-    query.prepare("UPDATE Sessions SET StartTime = :startOfLease, EndTime = :endOfLease, UserId = :userId, ComputerId = :computerId  WHERE Id = :id");
+    query.prepare("UPDATE Sessions SET StartTime = :startOfLease, EndTime = :endOfLease, Status = :status, UserId = :userId, ComputerId = :computerId  WHERE Id = :id");
 
     query.bindValue(":startOfLease", record.StartOfLease);
     query.bindValue(":endOfLease", record.EndOfLease);
     query.bindValue(":userId", record.UserId);
     query.bindValue(":computerId", record.ComputerId);
+     query.bindValue(":status", record.Status);
     query.bindValue(":id", record.Id);
 
     if (!query.exec()) {

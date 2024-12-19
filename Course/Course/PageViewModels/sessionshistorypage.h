@@ -2,6 +2,7 @@
 #define SESSIONSHISTORYPAGE_H
 
 #include <QWidget>
+#include <QSqlDatabase>
 
 namespace Ui {
 class SessionsHistoryPage;
@@ -12,7 +13,7 @@ class SessionsHistoryPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit SessionsHistoryPage(QWidget *parent = nullptr);
+    explicit SessionsHistoryPage(QSqlDatabase& db, QWidget *parent = nullptr);
     ~SessionsHistoryPage();
 
 private:

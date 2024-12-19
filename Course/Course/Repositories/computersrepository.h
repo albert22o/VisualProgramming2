@@ -7,7 +7,7 @@
 class ComputersRepository : public BaseRepository<Computer>
 {
 public:
-    ComputersRepository();
+    ComputersRepository(QSqlDatabase& db);
 
     virtual Computer GetById(int id) override;
     virtual QList<Computer> GetAll() override;

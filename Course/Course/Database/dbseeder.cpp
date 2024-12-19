@@ -6,6 +6,7 @@
 #include "TableShemas/computerstatuses.h"
 
 #include <QSqlQuery>
+#include <QDateTime>
 #include <QSqlError>
 
 void DbSeeder::SeedComputers(){
@@ -60,9 +61,70 @@ void DbSeeder::SeedComputers(){
     }
 }
 
+QSqlDatabase DbSeeder::GetDb(){
+    return db;
+}
+
 DbSeeder::DbSeeder() {
 
+    db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("computer_club.db");
+}
+
+void DbSeeder::ChangedOutdatedStatuses(){
+
+    OpenDbConnection();
+
+    QDateTime currentTime = QDateTime::currentDateTime();
+
+    QSqlQuery sessionQuery(db);
+    sessionQuery.prepare("SELECT Id, EndTime FROM Sessions WHERE Status = 'Active'");
+
+    if (!sessionQuery.exec()) {
+        throw std::runtime_error(sessionQuery.lastError().text().toStdString());
+    }
+
+    QList<int> sessionsToClose;
+
+    while (sessionQuery.next()) {
+
+        int sessionId = sessionQuery.value(0).toInt();
+        QString endTimeString = sessionQuery.value(1).toString();
+
+        QString format = "dd.MM.yyyy/HH:mm";
+
+        QDateTime endTime = QDateTime::fromString(endTimeString, format);
+
+        if (endTime < currentTime) {
+            sessionsToClose.append(sessionId);
+        }
+    }
+
+    if (!sessionsToClose.isEmpty()) {
+        QSqlQuery updateSessionsQuery(db);
+        updateSessionsQuery.prepare("UPDATE Sessions SET Status = 'Closed' WHERE Id IN (" + QStringList(sessionsToClose.size(), "?").join(",") + ")");
+
+        for (int id : sessionsToClose) {
+            updateSessionsQuery.addBindValue(id);
+        }
+
+        if (!updateSessionsQuery.exec()) {
+            throw std::runtime_error(updateSessionsQuery.lastError().text().toStdString());
+        }
+
+        QSqlQuery updateComputersQuery(db);
+        updateComputersQuery.prepare("UPDATE Computers SET Status = 'Free' WHERE Id IN (SELECT ComputerId FROM Sessions WHERE Id IN (" + QStringList(sessionsToClose.size(), "?").join(",") + "))");
+
+        for (int id : sessionsToClose) {
+            updateComputersQuery.addBindValue(id);
+        }
+
+        if (!updateComputersQuery.exec()) {
+            throw std::runtime_error(updateComputersQuery.lastError().text().toStdString());
+        }
+    }
+
+    CloseDbConnection();
 }
 
 void DbSeeder::CreateTablesIfNotExists(){

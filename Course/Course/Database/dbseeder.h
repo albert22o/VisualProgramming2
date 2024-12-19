@@ -12,8 +12,12 @@ public:
     DbSeeder();
 
     void CreateTablesIfNotExists();
+    void ChangedOutdatedStatuses();
+
+    QSqlDatabase GetDb();
+
 private:
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase db;
 
     void CreateTableFromShema(BaseTableShema* shema);
 

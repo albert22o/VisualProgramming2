@@ -13,7 +13,7 @@ class RegistrationPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit RegistrationPage(QWidget *parent = nullptr);
+    explicit RegistrationPage(QSqlDatabase& db, QWidget *parent = nullptr);
     ~RegistrationPage();
 
 private slots:
@@ -46,6 +46,8 @@ private:
     void OnEditAction();
 
     void OnSuccessRegistration(const User& user);
+
+    UsersRepository repos;
 };
 
 #endif // REGISTRATIONPAGE_H

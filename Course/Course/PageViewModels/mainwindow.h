@@ -17,12 +17,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QSqlDatabase& db, QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    void Setup();
+    void Setup(QSqlDatabase& db);
 
     MainPage* mainPage;
     RegistrationPage* registrationPage;

@@ -5,9 +5,10 @@
 #include <QMessageBox>
 #include <QTimer>
 
-RegistrationPage::RegistrationPage(QWidget *parent)
+RegistrationPage::RegistrationPage(QSqlDatabase& db, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::RegistrationPage)
+    , ui(new Ui::RegistrationPage),
+    repos(db)
 {
     ui->setupUi(this);
 
@@ -86,8 +87,6 @@ bool RegistrationPage::TryRegistrate(){
 
     auto username = ui->nameEdit->text();
     auto password = ui->passwordEdit->text();
-
-    UsersRepository repos;
 
     if(!repos.IsUserExists(username)){
 

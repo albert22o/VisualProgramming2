@@ -2,7 +2,13 @@
 #define MAINPAGE_H
 
 #include <QWidget>
+
+#include <QSqlDatabase>
+#include "Domain/session.h"
 #include "Application/computerviewmodel.h"
+#include "Repositories/computersrepository.h"
+#include "Repositories/usersrepository.h"
+#include "Repositories/sessionsrepository.h"
 
 namespace Ui {
 class MainPage;
@@ -13,7 +19,7 @@ class MainPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainPage(QWidget *parent = nullptr);
+    explicit MainPage(QSqlDatabase& database, QWidget *parent = nullptr);
     ~MainPage();
 
 private slots:
@@ -23,6 +29,8 @@ private slots:
 
     void OnComputerLeaseTimeChanged(const Computer &computer, int updatedTime);
     void OnComputerLeaseFinished(const Computer &computer);
+
+    void OnNewSessionStarted(Session& session, const Computer& computer);
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
@@ -38,6 +46,10 @@ private:
     void ConnectWithComputerViewModel(ComputerViewModel* computerViewModel);
 
     QString ToDayHoursMinutesView(int minutes);
+
+    UsersRepository usersRepos;
+    ComputersRepository computerRepos;
+    SessionsRepository sessionRepos;
 };
 
 #endif // MAINPAGE_H
