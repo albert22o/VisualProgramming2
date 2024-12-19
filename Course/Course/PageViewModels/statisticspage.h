@@ -2,6 +2,7 @@
 #define STATISTICSPAGE_H
 
 #include <QWidget>
+#include <QChartView>
 
 namespace Ui {
 class StatisticsPage;
@@ -16,6 +17,7 @@ public:
     ~StatisticsPage();
 
 private:
+    QChartView *chartView;
     Ui::StatisticsPage *ui;
 };
 

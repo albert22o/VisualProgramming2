@@ -3,7 +3,8 @@
 
 #include <QPieSeries>
 #include <QChart>
-#include <QChartView>
+
+#include "Database/TableShemas/computerrates.h"
 
 StatisticsPage::StatisticsPage(QWidget *parent)
     : QWidget(parent)
@@ -12,21 +13,28 @@ StatisticsPage::StatisticsPage(QWidget *parent)
     ui->setupUi(this);
 
     QPieSeries *series = new QPieSeries();
-    series->append("Категория 1", 30);
-    series->append("Категория 2", 20);
-    series->append("Категория 3", 25);
-    series->append("Категория 4", 15);
-    series->append("Категория 5", 10);
+
+    auto gamingTariff = ComputerRateConverter::ParseRate(ComputerRate::gaming);
+    auto standartTariff = ComputerRateConverter::ParseRate(ComputerRate::standart);
+    auto officeTariff = ComputerRateConverter::ParseRate(ComputerRate::office);
+
+    series->append(gamingTariff, 30);
+    series->append(standartTariff, 20);
+    series->append(officeTariff, 25);
 
     QChart *chart = new QChart();
     chart->addSeries(series);
-    chart->setTitle("Пример круговой диаграммы");
+    chart->setTitle("Диаграмма наиграных часов");
     chart->legend()->setVisible(true);
 
-    QChartView *chartView = new QChartView(chart);
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    ui->graphicsView->setViewport(chartView);
+    QVBoxLayout *layout = new QVBoxLayout(ui->graphicsView);
+    layout->addWidget(chartView);
+    ui->graphicsView->setLayout(layout);
+
+    ui->graphicsView->setFrameShape(QFrame::NoFrame);
 }
 
 StatisticsPage::~StatisticsPage()
