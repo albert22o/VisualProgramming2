@@ -45,8 +45,7 @@ SOURCES += \
         Repositories/computersrepository.cpp \
         Repositories/sessionsrepository.cpp \
         Repositories/usersrepository.cpp \
-        main.cpp \
-        adminpanel.cpp
+        main.cpp
 
 HEADERS += \
         Database/TableShemas/basetableshema.h \
@@ -67,16 +66,14 @@ HEADERS += \
         Repositories/baserepository.h \
         Repositories/computersrepository.h \
         Repositories/sessionsrepository.h \
-        Repositories/usersrepository.h \
-        adminpanel.h
+        Repositories/usersrepository.h
 
 FORMS += \
         PageViewModels/mainpage.ui \
         PageViewModels/mainwindow.ui \
         PageViewModels/registrationpage.ui \
         PageViewModels/sessionshistorypage.ui \
-        PageViewModels/statisticspage.ui \
-        adminpanel.ui
+        PageViewModels/statisticspage.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

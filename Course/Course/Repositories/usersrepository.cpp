@@ -4,6 +4,29 @@
 
 UsersRepository::UsersRepository() {}
 
+
+bool UsersRepository::IsUserExists(const QString& login){
+
+    OpenConnection();
+
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM Users WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if (!query.exec()) {
+       throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    if (query.next()) {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+
+    CloseConnection();
+
+    return false;
+}
+
 User UsersRepository::GetById(int id){
 
     OpenConnection();

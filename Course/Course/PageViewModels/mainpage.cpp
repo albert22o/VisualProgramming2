@@ -1,6 +1,9 @@
 #include "mainpage.h"
 #include "ui_mainpage.h"
 
+#include <QPoint>
+#include <QMouseEvent>
+
 #include "Repositories/computersrepository.h"
 #include "Repositories/sessionsrepository.h"
 
@@ -15,6 +18,7 @@ MainPage::MainPage(QWidget *parent)
 
 void MainPage::Setup(){
     CreateComputerTable();
+    ui->sessionInfo->setText("Выберете свободный компьютер");
 }
 
 MainPage::~MainPage()

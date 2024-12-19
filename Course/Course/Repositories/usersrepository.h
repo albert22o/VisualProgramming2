@@ -10,6 +10,7 @@ public:
     UsersRepository();
 
 
+    bool IsUserExists(const QString& login);
     User* AuthorizeUser(const QString& login, const QString& password);
 
     virtual User GetById(int id) override;
