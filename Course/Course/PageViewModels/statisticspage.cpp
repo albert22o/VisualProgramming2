@@ -4,13 +4,24 @@
 #include <QChart>
 
 #include "Database/TableShemas/computerrates.h"
-#include "Helpers/timehelper.h"
 
 StatisticsPage::StatisticsPage(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::StatisticsPage)
 {
     ui->setupUi(this);
+
+    Setup();
+}
+
+void StatisticsPage::Setup(){
+
+    InitGraphicsView();
+
+    ui->totalHoursPlayed->setText("Общее количество наигранных минут: " + QString::number(totalHoursPlayed));
+}
+
+void StatisticsPage::InitGraphicsView(){
 
     QChart *chart = new QChart();
     chart->addSeries(CreateDiagramm());
@@ -35,9 +46,21 @@ QPieSeries* StatisticsPage::CreateDiagramm(){
     auto standartTariff = ComputerRateConverter::ParseRate(ComputerRate::standart);
     auto officeTariff = ComputerRateConverter::ParseRate(ComputerRate::office);
 
-    series->append(gamingTariff, 30);
-    series->append(standartTariff, 20);
-    series->append(officeTariff, 25);
+    int gamingTariffPlayed = GetPlayedMinutesFromDbByComputerRate(ComputerRate::gaming);
+    int standartTariffPlayed = GetPlayedMinutesFromDbByComputerRate(ComputerRate::standart);
+    int officeTariffPlayed = GetPlayedMinutesFromDbByComputerRate(ComputerRate::office);
+
+    totalHoursPlayed = gamingTariffPlayed + standartTariffPlayed + officeTariffPlayed;
+
+    series->append(gamingTariff, gamingTariffPlayed);
+    series->append(standartTariff, standartTariffPlayed);
+    series->append(officeTariff, officeTariffPlayed);
+
+    series->setLabelsVisible(true);
+
+    for (const auto& slice : series->slices()) {
+        slice->setLabel(QString("%1: %2 мин").arg(slice->label()).arg(slice->value()));
+    }
 
     return series;
 }
@@ -47,10 +70,8 @@ int StatisticsPage::GetPlayedMinutesFromDbByComputerRate(ComputerRate computerRa
     auto sessions = repos.GetSessionsByComputerRate(computerRate, SessionStatus::Closed);
     int playedMinutes = 0;
 
-    TimeHelper timeHelper;
-
     for(auto& session : sessions){
-        playedMinutes += session.GetAllTimeInMinutes();
+        playedMinutes += session.GetTimeDiffrenceInMinuters();
     }
 
     return playedMinutes;

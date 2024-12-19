@@ -11,7 +11,8 @@ class Session : public Entity
 public:
     Session();
     Session(int id, QString startTime, QString endTime, QString status, int userId, int computerId);
-    int GetAllTimeInMinutes();
+    int GetTimeDiffrenceInMinuters();
+    int GetTimeDiffrenceInMinuters(QDateTime startTime);
     QString StartOfLease;
     QString EndOfLease;
     QString Status;

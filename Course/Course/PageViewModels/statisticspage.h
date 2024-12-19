@@ -21,13 +21,17 @@ public:
     ~StatisticsPage();
 
 private:
+    int totalHoursPlayed;
+
     QChartView *chartView;
     Ui::StatisticsPage *ui;
     SessionsRepository repos;
 
     int GetPlayedMinutesFromDbByComputerRate(ComputerRate computerRate);
 
+    void Setup();
     QPieSeries* CreateDiagramm();
+    void InitGraphicsView();
 };
 
 #endif // STATISTICSPAGE_H

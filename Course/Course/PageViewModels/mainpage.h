@@ -2,6 +2,7 @@
 #define MAINPAGE_H
 
 #include <QWidget>
+#include "Application/computerviewmodel.h"
 
 namespace Ui {
 class MainPage;
@@ -18,12 +19,25 @@ public:
 private slots:
     void on_tableWidget_cellClicked(int row, int column);
 
+    void on_startSession_clicked();
+
+    void OnComputerLeaseTimeChanged(const Computer &computer, int updatedTime);
+    void OnComputerLeaseFinished(const Computer &computer);
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 private:
     Ui::MainPage *ui;
-    QMap<int, QTimer*> computerTimers;
+    QMap<int, ComputerViewModel*> tableIdToComputer;
     int selectedRow;
     void Setup();
+    void GetComputers();
     void CreateComputerTable();
+
+    void ConnectWithComputerViewModel(ComputerViewModel* computerViewModel);
+
+    QString ToDayHoursMinutesView(int minutes);
 };
 
 #endif // MAINPAGE_H

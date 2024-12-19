@@ -11,7 +11,24 @@ Session::Session(int id, QString startTime, QString endTime, QString status, int
     ComputerId = computerId;
     Status = status;
 }
-int Session::GetAllTimeInMinutes(){
+
+int Session::GetTimeDiffrenceInMinuters(QDateTime startTime){
+
+    QString format = "dd.MM.yyyy/HH:mm";
+
+    QDateTime endOfLease = QDateTime::fromString(this->EndOfLease, format);
+
+    if (!endOfLease.isValid()) {
+        return -1;
+    }
+
+    qint64 minutesDifference = startTime.msecsTo(endOfLease) / 60000;
+
+    return minutesDifference;
+}
+
+int Session::GetTimeDiffrenceInMinuters()
+{
     QString format = "dd.MM.yyyy/HH:mm";
 
     QDateTime dateTime1 = QDateTime::fromString(this->StartOfLease, format);

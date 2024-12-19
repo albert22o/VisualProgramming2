@@ -1,12 +1,12 @@
 #ifndef TIMEHELPER_H
 #define TIMEHELPER_H
 
-#include "Domain/session.h"
 #include <QDateTime>
+
 class TimeHelper
 {
 public:
-    static QDateTime ParseDateTime(QString input);
+    static QDateTime ParseDateTime(const QString& input);
 };
 
 #endif

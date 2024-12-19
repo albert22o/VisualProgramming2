@@ -46,14 +46,14 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="startSession">
          <property name="text">
           <string>Начать сеанс</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="endSession">
          <property name="text">
           <string>Завершить сеанс</string>
          </property>

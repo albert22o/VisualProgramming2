@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        Application/computerviewmodel.cpp \
         Database/TableShemas/basetableshema.cpp \
         Database/TableShemas/computerrates.cpp \
         Database/TableShemas/computershema.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
         Domain/user.cpp \
         PageViewModels/mainpage.cpp \
         PageViewModels/mainwindow.cpp \
+        PageViewModels/newseanswindow.cpp \
         PageViewModels/registrationpage.cpp \
         PageViewModels/sessionshistorypage.cpp \
         PageViewModels/statisticspage.cpp \
@@ -50,6 +52,7 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+        Application/computerviewmodel.h \
         Database/TableShemas/basetableshema.h \
         Database/TableShemas/computerrates.h \
         Database/TableShemas/computershema.h \
@@ -63,6 +66,7 @@ HEADERS += \
         Domain/user.h \
         PageViewModels/mainpage.h \
         PageViewModels/mainwindow.h \
+        PageViewModels/newseanswindow.h \
         PageViewModels/registrationpage.h \
         PageViewModels/sessionshistorypage.h \
         PageViewModels/statisticspage.h \
@@ -74,6 +78,7 @@ HEADERS += \
 FORMS += \
         PageViewModels/mainpage.ui \
         PageViewModels/mainwindow.ui \
+        PageViewModels/newseanswindow.ui \
         PageViewModels/registrationpage.ui \
         PageViewModels/sessionshistorypage.ui \
         PageViewModels/statisticspage.ui
