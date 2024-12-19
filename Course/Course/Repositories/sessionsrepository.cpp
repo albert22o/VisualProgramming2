@@ -7,6 +7,8 @@ SessionsRepository::SessionsRepository() {}
 
 QList<Session> SessionsRepository::GetSessionsByComputerRate(ComputerRate compRate, SessionStatus sessionStatus){
 
+    OpenConnection();
+
     auto rate = int(compRate);
     auto status = ParseStatusFrom(sessionStatus);
 
@@ -36,6 +38,8 @@ QList<Session> SessionsRepository::GetSessionsByComputerRate(ComputerRate compRa
     else{
        throw std::runtime_error(query.lastError().text().toStdString());
     }
+
+    CloseConnection();
 
     return sessions;
 }

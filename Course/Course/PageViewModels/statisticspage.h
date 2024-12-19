@@ -5,6 +5,9 @@
 #include <QPieSeries>
 #include <QChartView>
 
+#include "Database/TableShemas/computerrates.h"
+#include "Repositories/sessionsrepository.h"
+
 namespace Ui {
 class StatisticsPage;
 }
@@ -20,6 +23,9 @@ public:
 private:
     QChartView *chartView;
     Ui::StatisticsPage *ui;
+    SessionsRepository repos;
+
+    int GetPlayedMinutesFromDbByComputerRate(ComputerRate computerRate);
 
     QPieSeries* CreateDiagramm();
 };

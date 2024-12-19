@@ -4,6 +4,7 @@
 #include <QChart>
 
 #include "Database/TableShemas/computerrates.h"
+#include "Helpers/timehelper.h"
 
 StatisticsPage::StatisticsPage(QWidget *parent)
     : QWidget(parent)
@@ -39,6 +40,20 @@ QPieSeries* StatisticsPage::CreateDiagramm(){
     series->append(officeTariff, 25);
 
     return series;
+}
+
+int StatisticsPage::GetPlayedMinutesFromDbByComputerRate(ComputerRate computerRate){
+
+    auto sessions = repos.GetSessionsByComputerRate(computerRate, SessionStatus::Closed);
+    int playedMinutes = 0;
+
+    TimeHelper timeHelper;
+
+    for(auto& session : sessions){
+        playedMinutes += timeHelper.GetAllTimeInMinutes(session);
+    }
+
+    return playedMinutes;
 }
 
 StatisticsPage::~StatisticsPage()
