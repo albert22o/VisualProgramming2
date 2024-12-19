@@ -1,4 +1,3 @@
-#include "adminpanel.h"
 #include <QApplication>
 
 #include "Database/dbseeder.h"

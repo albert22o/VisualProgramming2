@@ -2,6 +2,7 @@
 #define REGISTRATIONPAGE_H
 
 #include <QWidget>
+#include "Repositories/usersrepository.h"
 
 namespace Ui {
 class RegistrationPage;
@@ -20,16 +21,31 @@ private slots:
 
     void on_passwordEdit_textChanged(const QString &arg1);
 
+    void on_submitPassword_textChanged(const QString &arg1);
+
+    void on_addUserButton_clicked();
+
+    void on_clearFields_clicked();
+
 private:
-    QString validStylesheet = "QTextEdit { border: 2px solid green; }";
-    QString notValidStylesheet = "QTextEdit { border: 2px solid red; }";
+    QString validStylesheet = "QLineEdit { border: 2px solid green; }";
+    QString notValidStylesheet = "QLineEdit { border: 2px solid red; }";
 
     void Setup();
-    void TryRegistrate();
+    bool TryRegistrate();
     Ui::RegistrationPage *ui;
 
     bool IsValidUsername(const QString &username);
     bool IsValidPassword(const QString &password);
+
+    bool isUserNameValid = false;
+    bool isPasswordValid = false;
+    bool isSubmitPasswordValid = false;
+
+    bool IsAllFieldsValidated();
+    void OnEditAction();
+
+    void OnSuccessRegistration(const User& user);
 };
 
 #endif // REGISTRATIONPAGE_H
