@@ -5,6 +5,41 @@
 
 SessionsRepository::SessionsRepository() {}
 
+QList<Session> SessionsRepository::GetSessionsByComputerRate(ComputerRate compRate, SessionStatus sessionStatus){
+
+    auto rate = int(compRate);
+    auto status = ParseStatusFrom(sessionStatus);
+
+    QList<Session> sessions;
+
+    QSqlQuery query;
+    query.prepare("SELECT s.* FROM Sessions s "
+                  "JOIN Computers c ON s.ComputerId = c.Id "
+                  "WHERE c.Rate = :compRate AND s.Status = :sessionStatus");
+
+    query.bindValue(":compRate", rate);
+    query.bindValue(":sessionStatus", status);
+
+    if (query.exec()) {
+        while (query.next()) {
+
+            Session session;
+            session.Id = query.value("Id").toInt();
+            session.StartOfLease = query.value("StartTime").toString();
+            session.EndOfLease = query.value("EndTime").toString();
+            session.Status = query.value("Status").toString();
+            session.UserId = query.value("UserId").toInt();
+            session.ComputerId = query.value("ComputerId").toInt();
+            sessions.append(session);
+        }
+    }
+    else{
+       throw std::runtime_error(query.lastError().text().toStdString());
+    }
+
+    return sessions;
+}
+
 Session SessionsRepository::GetSessionByComputerId(int id){
 
     OpenConnection();

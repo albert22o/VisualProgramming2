@@ -1,7 +1,6 @@
 #include "statisticspage.h"
 #include "ui_statisticspage.h"
 
-#include <QPieSeries>
 #include <QChart>
 
 #include "Database/TableShemas/computerrates.h"
@@ -12,18 +11,8 @@ StatisticsPage::StatisticsPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QPieSeries *series = new QPieSeries();
-
-    auto gamingTariff = ComputerRateConverter::ParseRate(ComputerRate::gaming);
-    auto standartTariff = ComputerRateConverter::ParseRate(ComputerRate::standart);
-    auto officeTariff = ComputerRateConverter::ParseRate(ComputerRate::office);
-
-    series->append(gamingTariff, 30);
-    series->append(standartTariff, 20);
-    series->append(officeTariff, 25);
-
     QChart *chart = new QChart();
-    chart->addSeries(series);
+    chart->addSeries(CreateDiagramm());
     chart->setTitle("Диаграмма наиграных часов");
     chart->legend()->setVisible(true);
 
@@ -35,6 +24,21 @@ StatisticsPage::StatisticsPage(QWidget *parent)
     ui->graphicsView->setLayout(layout);
 
     ui->graphicsView->setFrameShape(QFrame::NoFrame);
+}
+
+QPieSeries* StatisticsPage::CreateDiagramm(){
+
+    auto series = new QPieSeries();
+
+    auto gamingTariff = ComputerRateConverter::ParseRate(ComputerRate::gaming);
+    auto standartTariff = ComputerRateConverter::ParseRate(ComputerRate::standart);
+    auto officeTariff = ComputerRateConverter::ParseRate(ComputerRate::office);
+
+    series->append(gamingTariff, 30);
+    series->append(standartTariff, 20);
+    series->append(officeTariff, 25);
+
+    return series;
 }
 
 StatisticsPage::~StatisticsPage()

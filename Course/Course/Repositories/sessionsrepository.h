@@ -4,6 +4,7 @@
 #include "baserepository.h"
 
 #include "Domain/session.h"
+#include "Database/TableShemas/computerrates.h"
 
 enum SessionStatus{
     Active = 0,
@@ -17,6 +18,7 @@ public:
 
     Session GetSessionByComputerId(int id);
     QList<Session> GetAllSessionsByStatus(SessionStatus sessionStatus);
+    QList<Session> GetSessionsByComputerRate(ComputerRate comp, SessionStatus sessionStatus);
 
     virtual Session GetById(int id) override;
     virtual QList<Session> GetAll() override;

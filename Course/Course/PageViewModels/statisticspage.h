@@ -2,6 +2,7 @@
 #define STATISTICSPAGE_H
 
 #include <QWidget>
+#include <QPieSeries>
 #include <QChartView>
 
 namespace Ui {
@@ -19,6 +20,8 @@ public:
 private:
     QChartView *chartView;
     Ui::StatisticsPage *ui;
+
+    QPieSeries* CreateDiagramm();
 };
 
 #endif // STATISTICSPAGE_H
