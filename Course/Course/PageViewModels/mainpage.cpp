@@ -29,9 +29,9 @@ MainPage::~MainPage()
 void MainPage::CreateComputerTable(){
 
     ui->tableWidget->setRowCount(0);
-    ui->tableWidget->setColumnCount(3);
+    ui->tableWidget->setColumnCount(4);
 
-    ui->tableWidget->setHorizontalHeaderLabels({"Компьютер", "Статус", "Время"});
+    ui->tableWidget->setHorizontalHeaderLabels({"Компьютер", "Статус", "Тариф", "Время"});
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     ComputersRepository repos;
@@ -43,12 +43,13 @@ void MainPage::CreateComputerTable(){
 
         ui->tableWidget->setItem(i, 0, new QTableWidgetItem(comp.Name));
         ui->tableWidget->setItem(i, 1, new QTableWidgetItem(comp.Status));
+        ui->tableWidget->setItem(i, 2, new QTableWidgetItem(ComputerRateConverter::ParseRate(comp.Rate)));
 
         if(comp.Status == SessionsRepository::ParseStatusFrom(SessionStatus::Active)) {
             auto remainTime = ""; // Здесь нужно добавить логику для расчета времени
-            ui->tableWidget->setItem(i, 2, new QTableWidgetItem(remainTime));
+            ui->tableWidget->setItem(i, 3, new QTableWidgetItem(remainTime));
         } else {
-            ui->tableWidget->setItem(i, 2, new QTableWidgetItem("-"));
+            ui->tableWidget->setItem(i, 3, new QTableWidgetItem("-"));
         }
 
         i++;
