@@ -3,9 +3,10 @@
 
 #include "Domain/session.h"
 #include <QDateTime>
-class TimeHelper
+static class TimeHelper
 {
 public:
+    static int GetAllTimeInMinutes(Session session);
     static QDateTime ParseDateTime(QString input);
 };
 

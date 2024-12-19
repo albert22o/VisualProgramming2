@@ -1,0 +1,27 @@
+#include "timehelper.h"
+
+int TimeHelper::GetAllTimeInMinutes(Session session) {
+    QString format = "dd.MM.yyyy/HH:mm";
+
+    QDateTime dateTime1 = QDateTime::fromString(session.StartOfLease, format);
+    QDateTime dateTime2 = QDateTime::fromString(session.EndOfLease, format);
+    if (!dateTime1.isValid() || !dateTime2.isValid()) {
+        return -1;
+    }
+    qint64 minutesDifference = dateTime1.msecsTo(dateTime2) / 60000;
+
+    return minutesDifference;
+}
+QDateTime parseDateTime(const QString& input) {
+    QStringList parts = input.split('/');
+    if (parts.size() != 2)
+        return QDateTime();
+    
+    QDate date = QDate::fromString(parts[0], "dd.MM.yyyy");
+    QTime time = QTime::fromString(parts[1], "hh:mm");
+    
+    if (!date.isValid() || !time.isValid())
+        return QDateTime();
+    
+    return QDateTime(date, time);
+}

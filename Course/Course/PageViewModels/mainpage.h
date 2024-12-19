@@ -20,6 +20,7 @@ private slots:
 
 private:
     Ui::MainPage *ui;
+    QMap<int, QTimer*> computerTimers;
     int selectedRow;
     void Setup();
     void CreateComputerTable();

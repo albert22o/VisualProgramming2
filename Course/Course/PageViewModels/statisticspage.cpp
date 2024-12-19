@@ -50,7 +50,7 @@ int StatisticsPage::GetPlayedMinutesFromDbByComputerRate(ComputerRate computerRa
     TimeHelper timeHelper;
 
     for(auto& session : sessions){
-        playedMinutes += timeHelper.GetAllTimeInMinutes(session);
+        playedMinutes += session.GetAllTimeInMinutes();
     }
 
     return playedMinutes;
