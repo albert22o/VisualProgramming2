@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT += sql
+QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,6 +28,7 @@ CONFIG += c++11
 
 SOURCES += \
         Database/TableShemas/basetableshema.cpp \
+        Database/TableShemas/computerrates.cpp \
         Database/TableShemas/computershema.cpp \
         Database/TableShemas/computerstatuses.cpp \
         Database/TableShemas/sessionshema.cpp \
@@ -49,6 +51,7 @@ SOURCES += \
 
 HEADERS += \
         Database/TableShemas/basetableshema.h \
+        Database/TableShemas/computerrates.h \
         Database/TableShemas/computershema.h \
         Database/TableShemas/computerstatuses.h \
         Database/TableShemas/sessionshema.h \

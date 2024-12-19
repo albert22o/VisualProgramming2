@@ -14,7 +14,7 @@ Computer ComputersRepository::GetById(int id){
 
     QSqlQuery query;
 
-    query.prepare("SELECT Id, Name, Status FROM Computers WHERE Id = :id");
+    query.prepare("SELECT Id, Name, Status, Rate FROM Computers WHERE Id = :id");
     query.bindValue(":id", id);
 
     if (query.exec()) {
@@ -24,6 +24,7 @@ Computer ComputersRepository::GetById(int id){
             computer.Id = query.value("Id").toInt();
             computer.Name = query.value("Name").toString();
             computer.Status = query.value("Status").toString();
+            computer.Rate = ComputerRateConverter::FromInt(query.value("Rate").toInt());
         }
         else {
             throw std::runtime_error(query.lastError().text().toStdString());
@@ -55,8 +56,9 @@ QList<Computer> ComputersRepository::GetAll(){
         int id = query.value(0).toInt();
         QString name = query.value(1).toString();
         QString status = query.value(2).toString();
+        auto rate = ComputerRateConverter::FromInt(query.value("Rate").toInt());
 
-        computers.append(Computer(id, name, status));
+        computers.append(Computer(id, name, status, rate));
     }
 
     CloseConnection();
@@ -71,12 +73,13 @@ int ComputersRepository::AddRecord(Computer record){
     QSqlQuery query;
 
     query.prepare(R"(
-        INSERT INTO Computers (name, status)
-        VALUES (:name, :status)
+        INSERT INTO Computers (name, status, rate)
+        VALUES (:name, :status, :rate)
     )");
 
     query.bindValue(":name", record.Name);
     query.bindValue(":status", record.Status);
+    query.bindValue(":rate", int(record.Rate));
 
     if (!query.exec()) {
         throw std::runtime_error(query.lastError().text().toStdString());
@@ -95,10 +98,11 @@ void ComputersRepository::UpdateRecord(Computer record){
 
     QSqlQuery query;
 
-    query.prepare("UPDATE Computers SET Name = :name, Status = :status WHERE Id = :id");
+    query.prepare("UPDATE Computers SET Name = :name, Status = :status, Rate = :rate WHERE Id = :id");
 
     query.bindValue(":name", record.Name);
     query.bindValue(":status", record.Status);
+    query.bindValue(":rate", record.Rate);
     query.bindValue(":id", record.Id);
 
     if (!query.exec()) {

@@ -40,11 +40,18 @@ void DbSeeder::SeedComputers(){
             statuses.push_back(free);
         }
 
+        QList<int> rates;
+
+        for(int i=0;i<10;i++){
+            rates.push_back(i % 3);
+        }
+
         for (int i = 0; i < 10; ++i) {
 
-            query.prepare("INSERT INTO Computers (Name, Status) VALUES (:name, :status)");
+            query.prepare("INSERT INTO Computers (Name, Status, Rate) VALUES (:name, :status, :rate)");
             query.bindValue(":name", computerNames[i]);
             query.bindValue(":status", statuses[i]);
+            query.bindValue(":rate", rates[i]);
 
             if (!query.exec()) {
                 throw std::runtime_error(query.lastError().text().toStdString());
