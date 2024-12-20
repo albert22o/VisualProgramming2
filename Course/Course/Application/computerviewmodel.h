@@ -3,6 +3,7 @@
 
 #include "Domain/computer.h"
 #include <QTimer>
+#include "Database/TableShemas/computerstatuses.h"
 
 class ComputerViewModel : public QObject
 {
@@ -10,8 +11,10 @@ class ComputerViewModel : public QObject
 public:
     ComputerViewModel(Computer computer);
     void StartTimer(int remainMinutes);
+    void StopTimer();
 
     Computer GetComputer();
+    void SetComputerStatus(QString status);
 
 signals:
     void timerStopped(const Computer& comp, int newTimeInSeconds);

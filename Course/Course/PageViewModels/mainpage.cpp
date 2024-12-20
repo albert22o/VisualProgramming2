@@ -149,6 +149,7 @@ void MainPage::on_tableWidget_cellClicked(int row, int column)
     }
     else{
         ui->startSession->setEnabled(false);
+        ui->endSession->setEnabled(true);
     }
 }
 
@@ -184,30 +185,9 @@ void MainPage::OnNewSessionStarted(Session &session, const Computer& computer){
 
     ui->tableWidget->setItem(computer.Id - 1, 3, new QTableWidgetItem(time));
 
+    tableIdToComputer[computer.Id - 1]->SetComputerStatus(ComputerStatuses::Busy());
+
     tableIdToComputer[computer.Id - 1]->StartTimer(session.GetTimeDiffrenceInSeconds());
-}
-
-QString MainPage::ToDayHoursMinutesView(int minutes){
-
-    int days = minutes / (24 * 60);
-    int hours = (minutes % (24 * 60)) / 60;
-    int min = minutes % 60;
-
-    QString result = "";
-
-    if (days > 0) {
-        result.append(QString("%1 дн.").arg(days));
-    }
-    if (hours > 0) {
-        if (!result.isEmpty()) result.append(", ");
-        result.append(QString("%1 час.").arg(hours));
-    }
-    if (min > 0 || (days == 0 && hours == 0)) {
-        if (!result.isEmpty()) result.append(", ");
-        result.append(QString("%1 мин.").arg(min));
-    }
-
-    return result;
 }
 
 QString MainPage::FormatTime(int seconds){
@@ -235,3 +215,22 @@ QString MainPage::FormatTime(int seconds){
     return result.trimmed();
 }
 
+void MainPage::on_endSession_clicked()
+{
+    QTableWidgetItem* currentItem = ui->tableWidget->currentItem();
+
+    if(currentItem != nullptr){
+
+        int computerId = currentItem->row();
+
+        auto computerViewModel = tableIdToComputer[computerId];
+        auto computer = computerViewModel->GetComputer();
+
+        if(computer.Status == ComputerStatuses::Busy()){
+
+            OnComputerLeaseFinished(computer);
+            tableIdToComputer[computer.Id - 1]->SetComputerStatus(ComputerStatuses::Free());
+            computerViewModel->StopTimer();
+        }
+    }
+}

@@ -42,33 +42,3 @@ int Session::GetTimeDiffrenceInSeconds(){
 
     return secondsDifference;
 }
-
-
-int Session::GetTimeDiffrenceInMinuters(QDateTime startTime){
-
-    QString format = "dd.MM.yyyy/HH:mm:ss";
-
-    QDateTime endOfLease = QDateTime::fromString(this->EndOfLease, format);
-
-    if (!endOfLease.isValid()) {
-        return -1;
-    }
-
-    qint64 minutesDifference = startTime.msecsTo(endOfLease) / 60000;
-
-    return minutesDifference;
-}
-
-int Session::GetTimeDiffrenceInMinuters()
-{
-    QString format = "dd.MM.yyyy/HH:mm:ss";
-
-    QDateTime dateTime1 = QDateTime::fromString(this->StartOfLease, format);
-    QDateTime dateTime2 = QDateTime::fromString(this->EndOfLease, format);
-    if (!dateTime1.isValid() || !dateTime2.isValid()) {
-        return -1;
-    }
-    qint64 minutesDifference = dateTime1.msecsTo(dateTime2) / 60000;
-
-    return minutesDifference;
-}

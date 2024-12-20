@@ -86,7 +86,7 @@ int StatisticsPage::GetPlayedMinutesFromDbByComputerRate(ComputerRate computerRa
     int playedMinutes = 0;
 
     for(auto& session : sessions){
-        playedMinutes += session.GetTimeDiffrenceInMinuters();
+        playedMinutes += session.GetTimeDiffrenceInSeconds() / 60;
     }
 
     return playedMinutes;

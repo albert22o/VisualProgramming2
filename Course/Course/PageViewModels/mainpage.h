@@ -32,6 +32,8 @@ private slots:
 
     void OnNewSessionStarted(Session& session, const Computer& computer);
 
+    void on_endSession_clicked();
+
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
@@ -45,7 +47,6 @@ private:
 
     void ConnectWithComputerViewModel(ComputerViewModel* computerViewModel);
 
-    QString ToDayHoursMinutesView(int minutes);
     QString FormatTime(int seconds);
 
     UsersRepository usersRepos;

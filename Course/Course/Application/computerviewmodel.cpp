@@ -14,6 +14,15 @@ void ComputerViewModel::StartTimer(int remainSeconds){
     QObject::connect(timer, &QTimer::timeout, this, &ComputerViewModel::OnTimerTick);
 }
 
+void ComputerViewModel::StopTimer(){
+    timer->stop();
+    remainTimeInSeconds = 0;
+}
+
+void ComputerViewModel::SetComputerStatus(QString status){
+    computer.Status = status;
+}
+
 void ComputerViewModel::OnTimerTick(){
 
     if (remainTimeInSeconds > 0) {
