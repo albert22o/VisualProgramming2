@@ -81,13 +81,11 @@ Session SessionsRepository::GetSessionByComputerId(int id){
     return session;
 }
 
-QList<Session> SessionsRepository::GetAllSessionsByStatus(SessionStatus sessionStatus){
+QList<Session> SessionsRepository::GetClosedSessions(){
 
     OpenConnection();
 
-    QSqlQuery query("SELECT Id, StartTime, EndTime, Status, UserId, ComputerId FROM Sessions WHERE Status = :status");
-
-    query.bindValue(":status", ParseStatusFrom(sessionStatus));
+    QSqlQuery query("SELECT Id, StartTime, EndTime, Status, UserId, ComputerId FROM Sessions WHERE Status = 'Closed'");
 
     if (!query.exec()) {
         throw std::runtime_error(query.lastError().text().toStdString());
@@ -100,7 +98,7 @@ QList<Session> SessionsRepository::GetAllSessionsByStatus(SessionStatus sessionS
         int id = query.value(0).toInt();
         QString startTime = query.value(1).toString();
         QString endTime = query.value(2).toString();
-        QString status = query.value(2).toString();
+        QString status = query.value(3).toString();
         int userId = query.value(4).toInt();
         int computerId =   query.value(5).toInt();
 

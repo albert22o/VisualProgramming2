@@ -173,6 +173,11 @@ void MainPage::on_startSession_clicked()
 
         connect(newSeansDialog, &NewSeansWindow::SessionStarted, this, &MainPage::OnNewSessionStarted);
         newSeansDialog->exec();
+
+        ui->tableWidget->clearSelection();
+        ui->sessionInfo->clear();
+        ui->startSession->setEnabled(false);
+        ui->endSession->setEnabled(false);
     }
 }
 

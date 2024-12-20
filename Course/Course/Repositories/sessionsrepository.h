@@ -17,7 +17,7 @@ public:
     SessionsRepository(QSqlDatabase& db);
 
     Session GetSessionByComputerId(int id);
-    QList<Session> GetAllSessionsByStatus(SessionStatus sessionStatus);
+    QList<Session> GetClosedSessions();
     QList<Session> GetSessionsByComputerRate(ComputerRate comp, SessionStatus sessionStatus);
 
     virtual Session GetById(int id) override;

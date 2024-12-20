@@ -37,7 +37,9 @@ void NewSeansWindow::Setup(const Computer &computer){
 
     ui->passwordEdit->setEchoMode(QLineEdit::Password);
 
-    ui->startOfLease->setDateTime(QDateTime::currentDateTime().addSecs(25200));
+    auto currentTime = QDateTime::currentDateTime().toString();
+    ui->currentTime->setReadOnly(true);
+    ui->currentTime->setText(currentTime);
 
     ui->nameEdit->setPlaceholderText("Введите имя пользователя");
     ui->passwordEdit->setPlaceholderText("Введите пароль от аккауунта");

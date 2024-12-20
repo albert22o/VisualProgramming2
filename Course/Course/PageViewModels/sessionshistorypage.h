@@ -4,6 +4,12 @@
 #include <QWidget>
 #include <QSqlDatabase>
 
+#include <QStandardItemModel>
+
+#include "Repositories/sessionsrepository.h"
+#include "Repositories/usersrepository.h"
+#include "Repositories/computersrepository.h"
+
 namespace Ui {
 class SessionsHistoryPage;
 }
@@ -18,6 +24,12 @@ public:
 
 private:
     Ui::SessionsHistoryPage *ui;
+
+    QStandardItemModel *model; // Указатель на модель
+
+    SessionsRepository sessionRepos;
+    UsersRepository userRepos;
+    ComputersRepository computerRepos;
 };
 
 #endif // SESSIONSHISTORYPAGE_H
