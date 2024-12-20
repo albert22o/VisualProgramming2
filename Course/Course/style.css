@@ -1,0 +1,93 @@
+/* Общий стиль для всех виджетов */
+QWidget {
+    background-color: white; /* Основной цвет фона */
+    color: black; /* Цвет текста */
+    font-family: Arial, sans-serif; /* Основной шрифт */
+    font-size: 14px; /* Размер шрифта */
+}
+
+/* Кнопки */
+QPushButton {
+    background-color: #f0f0f0; /* Светло-серый фон для кнопок */
+    border: 1px solid #dcdcdc; /* Граница */
+    border-radius: 5px; /* Сглаженные края */
+    padding: 5px 10px; /* Внутренние отступы */
+}
+
+QPushButton:hover {
+    background-color: #e0e0e0; /* Цвет кнопки при наведении */
+}
+
+QPushButton:pressed {
+    background-color: #d0d0d0; /* Цвет кнопки при нажатии */
+}
+
+/* Текстовые поля */
+QLineEdit, QTextEdit {
+    background-color: #ffffff; /* Белый фон */
+    color: black; /* Черный текст */
+    border: 1px solid #dcdcdc; /* Граница */
+    border-radius: 3px; /* Сглаженные края */
+    padding: 3px; /* Внутренние отступы */
+}
+
+/* Списки и таблицы */
+QListWidget, QTableWidget {
+    background-color: #ffffff; /* Белый фон */
+    border: 1px solid #dcdcdc; /* Граница */
+    color: black; /* Цвет текста */
+    gridline-color: #dcdcdc; /* Цвет линий сетки */
+}
+
+/* Выпадающие списки */
+QComboBox {
+    background-color: #ffffff; /* Белый фон */
+    border: 1px solid #dcdcdc; /* Граница */
+    border-radius: 3px; /* Сглаженные края */
+    padding: 3px; /* Внутренние отступы */
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffffff; /* Белый фон списка */
+    border: 1px solid #dcdcdc; /* Граница */
+    color: black; /* Цвет текста */
+}
+
+/* Ползунки */
+QSlider::groove:horizontal {
+    height: 5px;
+    background: #dcdcdc;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    width: 15px;
+    height: 15px;
+    background: #a0a0a0;
+    border: 1px solid #808080;
+    border-radius: 7px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: #808080;
+}
+
+/* Флажки и радиокнопки */
+QCheckBox, QRadioButton {
+    color: black; /* Цвет текста */
+}
+
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 15px;
+    height: 15px;
+}
+
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+    background-color: #a0a0a0; /* Цвет галочки */
+    border: 1px solid #808080; /* Граница */
+}
+
+QCheckBox::indicator:unchecked, QRadioButton::indicator:unchecked {
+    background-color: white; /* Белый фон */
+    border: 1px solid #808080; /* Граница */
+}
