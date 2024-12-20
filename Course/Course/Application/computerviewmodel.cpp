@@ -4,23 +4,23 @@ ComputerViewModel::ComputerViewModel(Computer computer) {
     this->computer = computer;
 }
 
-void ComputerViewModel::StartTimer(int remainMinutes){
+void ComputerViewModel::StartTimer(int remainSeconds){
 
-    remainTimeInMinutes = remainMinutes;
+    remainTimeInSeconds = remainSeconds;
 
     timer = new QTimer();
-    timer->start(60000);
+    timer->start(1000);
 
     QObject::connect(timer, &QTimer::timeout, this, &ComputerViewModel::OnTimerTick);
 }
 
 void ComputerViewModel::OnTimerTick(){
 
-    if (remainTimeInMinutes > 0) {
-        remainTimeInMinutes--;
-        emit timeUpdated(computer, remainTimeInMinutes);
+    if (remainTimeInSeconds > 0) {
+        remainTimeInSeconds--;
+        emit timeUpdated(computer, remainTimeInSeconds);
     } else {
-        emit timerStopped(computer, remainTimeInMinutes);
+        emit timerStopped(computer, remainTimeInSeconds);
         timer->stop();
     }
 }

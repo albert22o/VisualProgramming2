@@ -59,7 +59,7 @@ void NewSeansWindow::on_startSession_clicked()
 
         session.ComputerId = computer.Id;
         session.Status = sessionRepos.ParseStatusFrom(SessionStatus::Active);
-        session.StartOfLease = QDateTime::currentDateTime().toString("dd.MM.yyyy/HH:mm");
+        session.StartOfLease = QDateTime::currentDateTime().toString("dd.MM.yyyy/HH:mm:ss");
         session.UserId = user->Id;
 
         auto duration = ui->duration->time();
@@ -67,7 +67,7 @@ void NewSeansWindow::on_startSession_clicked()
 
         auto endOfLease = QDateTime::currentDateTime().addSecs(totalSeconds);
 
-        session.EndOfLease = endOfLease.toString("dd.MM.yyyy/HH:mm");
+        session.EndOfLease = endOfLease.toString("dd.MM.yyyy/HH:mm:ss");
 
         sessionRepos.AddRecord(session);
 

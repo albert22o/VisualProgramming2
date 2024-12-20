@@ -52,7 +52,8 @@ Session SessionsRepository::GetSessionByComputerId(int id){
 
     QSqlQuery query;
 
-    query.prepare("SELECT Id, StartTime, EndTime, UserId, ComputerId FROM Sessions WHERE ComputerId = :id");
+    query.prepare("SELECT Id, StartTime, EndTime, Status, UserId, ComputerId FROM Sessions WHERE ComputerId = :id AND Status = 'Active'");
+
     query.bindValue(":id", id);
 
     if (query.exec()) {
@@ -63,6 +64,7 @@ Session SessionsRepository::GetSessionByComputerId(int id){
             session.StartOfLease = query.value("StartTime").toString();
             session.EndOfLease = query.value("EndTime").toString();
             session.UserId = query.value("UserId").toInt();
+            session.Status = query.value("Status").toString();
             session.ComputerId = query.value("ComputerId").toInt();
 
         }

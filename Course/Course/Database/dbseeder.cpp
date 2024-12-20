@@ -91,7 +91,7 @@ void DbSeeder::ChangedOutdatedStatuses(){
         int sessionId = sessionQuery.value(0).toInt();
         QString endTimeString = sessionQuery.value(1).toString();
 
-        QString format = "dd.MM.yyyy/HH:mm";
+        QString format = "dd.MM.yyyy/HH:mm:ss";
 
         QDateTime endTime = QDateTime::fromString(endTimeString, format);
 

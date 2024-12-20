@@ -14,11 +14,11 @@ public:
     Computer GetComputer();
 
 signals:
-    void timerStopped(const Computer& comp, int newTimeInMinutes);
-    void timeUpdated(const Computer& comp, int newTimeInMinutes);
+    void timerStopped(const Computer& comp, int newTimeInSeconds);
+    void timeUpdated(const Computer& comp, int newTimeInSeconds);
 
 private:
-    int remainTimeInMinutes = 0;
+    int remainTimeInSeconds = 0;
     Computer computer;
     QTimer* timer;
 

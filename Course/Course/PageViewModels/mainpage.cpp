@@ -28,7 +28,8 @@ void MainPage::ConnectWithComputerViewModel(ComputerViewModel* computerViewModel
 void MainPage::OnComputerLeaseTimeChanged(const Computer &computer, int updatedTime){
 
     auto item = ui->tableWidget->item(computer.Id - 1, 3);
-    auto remainTime = ToDayHoursMinutesView(updatedTime);
+
+    auto remainTime = FormatTime(updatedTime);
 
     item->setText(remainTime);
 }
@@ -75,14 +76,17 @@ void MainPage::GetComputers(){
     int i = 0;
 
     for(auto& comp : computers){
+
         auto compViewModel = new ComputerViewModel(comp);
+
         ConnectWithComputerViewModel(compViewModel);
         tableIdToComputer[i] = compViewModel;
 
         if(comp.Status == ComputerStatuses::Busy()){
 
             auto activeSession = sessionRepos.GetSessionByComputerId(comp.Id);
-            compViewModel->StartTimer(activeSession.GetTimeDiffrenceInMinuters(QDateTime::currentDateTime()));
+
+            compViewModel->StartTimer(activeSession.GetTimeDiffrenceInSeconds(QDateTime::currentDateTime()));
         }
 
         i++;
@@ -118,9 +122,9 @@ void MainPage::CreateComputerTable(){
         if(comp.Status == ComputerStatuses::Busy()) {
 
             auto activeSession = sessionRepos.GetSessionByComputerId(comp.Id);
-            auto remainTimeInMinutes = activeSession.GetTimeDiffrenceInMinuters(QDateTime::currentDateTime());
+            auto remainTimeInSeconds = activeSession.GetTimeDiffrenceInSeconds(QDateTime::currentDateTime());
 
-            auto remainTime = ToDayHoursMinutesView(remainTimeInMinutes);
+            auto remainTime = FormatTime(remainTimeInSeconds);
 
             ui->tableWidget->setItem(rowId, 3, new QTableWidgetItem(remainTime));
         } else {
@@ -148,7 +152,6 @@ void MainPage::on_tableWidget_cellClicked(int row, int column)
     }
 }
 
-
 void MainPage::on_startSession_clicked()
 {
     QTableWidgetItem* currentItem = ui->tableWidget->currentItem();
@@ -174,10 +177,14 @@ void MainPage::on_startSession_clicked()
 
 void MainPage::OnNewSessionStarted(Session &session, const Computer& computer){
 
-    ui->tableWidget->setItem(computer.Id - 1, 1, new QTableWidgetItem(computer.Status));
-    ui->tableWidget->setItem(computer.Id - 1, 3, new QTableWidgetItem(ToDayHoursMinutesView(session.GetTimeDiffrenceInMinuters())));
+    ui->tableWidget->setItem(computer.Id - 1, 1,
+        new QTableWidgetItem(computer.Status));
 
-    tableIdToComputer[computer.Id - 1]->StartTimer(session.GetTimeDiffrenceInMinuters());
+    auto time = FormatTime(session.GetTimeDiffrenceInSeconds());
+
+    ui->tableWidget->setItem(computer.Id - 1, 3, new QTableWidgetItem(time));
+
+    tableIdToComputer[computer.Id - 1]->StartTimer(session.GetTimeDiffrenceInSeconds());
 }
 
 QString MainPage::ToDayHoursMinutesView(int minutes){
@@ -203,4 +210,28 @@ QString MainPage::ToDayHoursMinutesView(int minutes){
     return result;
 }
 
+QString MainPage::FormatTime(int seconds){
+
+    int days = seconds / (24 * 3600);
+    seconds %= (24 * 3600);
+    int hours = seconds / 3600;
+    seconds %= 3600;
+    int minutes = seconds / 60;
+    int remainingSeconds = seconds % 60;
+
+    QString result;
+
+    if (days > 0) {
+        result += QString("%1 дн. ").arg(days);
+    }
+    if (hours > 0) {
+        result += QString("%1 ч. ").arg(hours);
+    }
+    if (minutes > 0) {
+        result += QString("%1 мин. ").arg(minutes);
+    }
+    result += QString("%1 сек.").arg(remainingSeconds);
+
+    return result.trimmed();
+}
 

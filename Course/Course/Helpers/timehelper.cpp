@@ -6,7 +6,7 @@ QDateTime TimeHelper::ParseDateTime(const QString& input) {
         return QDateTime();
     
     QDate date = QDate::fromString(parts[0], "dd.MM.yyyy");
-    QTime time = QTime::fromString(parts[1], "hh:mm");
+    QTime time = QTime::fromString(parts[1], "hh:mm:ss");
     
     if (!date.isValid() || !time.isValid())
         return QDateTime();

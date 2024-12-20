@@ -46,6 +46,7 @@ private:
     void ConnectWithComputerViewModel(ComputerViewModel* computerViewModel);
 
     QString ToDayHoursMinutesView(int minutes);
+    QString FormatTime(int seconds);
 
     UsersRepository usersRepos;
     ComputersRepository computerRepos;
