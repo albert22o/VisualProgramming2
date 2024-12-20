@@ -1,59 +1,58 @@
-/* Общий стиль для всех виджетов */
+
 QWidget {
-    background-color: white; /* Основной цвет фона */
-    color: black; /* Цвет текста */
-    font-family: Arial, sans-serif; /* Основной шрифт */
-    font-size: 14px; /* Размер шрифта */
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
 }
 
 /* Кнопки */
 QPushButton {
-    background-color: #f0f0f0; /* Светло-серый фон для кнопок */
-    border: 1px solid #dcdcdc; /* Граница */
-    border-radius: 5px; /* Сглаженные края */
-    padding: 5px 10px; /* Внутренние отступы */
+    background-color: #f0f0f0;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 5px 10px;
 }
 
 QPushButton:hover {
-    background-color: #e0e0e0; /* Цвет кнопки при наведении */
+    background-color: #e0e0e0;
 }
 
 QPushButton:pressed {
-    background-color: #d0d0d0; /* Цвет кнопки при нажатии */
+    background-color: #d0d0d0;
 }
 
 /* Текстовые поля */
 QLineEdit, QTextEdit {
-    background-color: #ffffff; /* Белый фон */
-    color: black; /* Черный текст */
-    border: 1px solid #dcdcdc; /* Граница */
-    border-radius: 3px; /* Сглаженные края */
-    padding: 3px; /* Внутренние отступы */
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+    padding: 3px;
 }
 
-/* Списки и таблицы */
 QListWidget, QTableWidget {
-    background-color: #ffffff; /* Белый фон */
-    border: 1px solid #dcdcdc; /* Граница */
-    color: black; /* Цвет текста */
-    gridline-color: #dcdcdc; /* Цвет линий сетки */
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    color: black;
+    gridline-color: #dcdcdc;
 }
 
-/* Выпадающие списки */
+
 QComboBox {
-    background-color: #ffffff; /* Белый фон */
-    border: 1px solid #dcdcdc; /* Граница */
-    border-radius: 3px; /* Сглаженные края */
-    padding: 3px; /* Внутренние отступы */
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+    padding: 3px;
 }
 
 QComboBox QAbstractItemView {
-    background-color: #ffffff; /* Белый фон списка */
-    border: 1px solid #dcdcdc; /* Граница */
-    color: black; /* Цвет текста */
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    color: black;
 }
 
-/* Ползунки */
+
 QSlider::groove:horizontal {
     height: 5px;
     background: #dcdcdc;
@@ -72,22 +71,3 @@ QSlider::handle:horizontal:hover {
     background: #808080;
 }
 
-/* Флажки и радиокнопки */
-QCheckBox, QRadioButton {
-    color: black; /* Цвет текста */
-}
-
-QCheckBox::indicator, QRadioButton::indicator {
-    width: 15px;
-    height: 15px;
-}
-
-QCheckBox::indicator:checked, QRadioButton::indicator:checked {
-    background-color: #a0a0a0; /* Цвет галочки */
-    border: 1px solid #808080; /* Граница */
-}
-
-QCheckBox::indicator:unchecked, QRadioButton::indicator:unchecked {
-    background-color: white; /* Белый фон */
-    border: 1px solid #808080; /* Граница */
-}
