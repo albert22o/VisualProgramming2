@@ -30,3 +30,13 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    auto statisticsPage = qobject_cast<StatisticsPage*>(ui->tabWidget->widget(index));
+
+    if(statisticsPage){
+        statisticsPage->UpdateView();
+    }
+}
+

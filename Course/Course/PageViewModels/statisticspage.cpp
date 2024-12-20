@@ -16,6 +16,19 @@ StatisticsPage::StatisticsPage(QSqlDatabase& db, QWidget *parent)
     Setup();
 }
 
+void StatisticsPage::UpdateView(){
+
+    QChart *chart = new QChart();
+    chart->addSeries(CreateDiagramm());
+    chart->setTitle("Диаграмма наиграных часов");
+    chart->legend()->setVisible(true);
+
+    chartView->setChart(chart);
+    chartView->update();
+
+    ui->totalHoursPlayed->setText("Общее количество наигранных минут: " + QString::number(totalHoursPlayed));
+}
+
 void StatisticsPage::Setup(){
 
     InitGraphicsView();

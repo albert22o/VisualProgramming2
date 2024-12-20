@@ -20,6 +20,8 @@ public:
     explicit StatisticsPage(QSqlDatabase& db, QWidget *parent = nullptr);
     ~StatisticsPage();
 
+    void UpdateView();
+
 private:
     int totalHoursPlayed;
 

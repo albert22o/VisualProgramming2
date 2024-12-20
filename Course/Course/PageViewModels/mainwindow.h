@@ -20,6 +20,9 @@ public:
     explicit MainWindow(QSqlDatabase& db, QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     void Setup(QSqlDatabase& db);
