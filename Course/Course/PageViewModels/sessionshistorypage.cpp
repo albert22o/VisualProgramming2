@@ -50,3 +50,4 @@ SessionsHistoryPage::~SessionsHistoryPage()
 {
     delete ui;
 }
+
