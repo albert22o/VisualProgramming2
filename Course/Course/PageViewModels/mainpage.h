@@ -34,6 +34,14 @@ private slots:
 
     void on_endSession_clicked();
 
+    void on_search_textChanged(const QString &arg1);
+
+    void on_clearButton_clicked();
+
+    void on_tariff_activated(int index);
+
+    void on_status_activated(int index);
+
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 

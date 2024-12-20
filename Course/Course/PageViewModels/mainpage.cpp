@@ -58,6 +58,16 @@ void MainPage::Setup(){
     ui->sessionInfo->setText("Выберете свободный компьютер");
     ui->startSession->setEnabled(false);
     ui->endSession->setEnabled(false);
+
+    ui->search->setPlaceholderText("Поиск");
+
+    ui->status->addItem("All");
+    ui->status->addItem(ComputerStatuses::Busy());
+    ui->status->addItem(ComputerStatuses::Free());
+    ui->tariff->addItem("All");
+    ui->tariff->addItem("Gaming");
+    ui->tariff->addItem("Standart");
+    ui->tariff->addItem("Office");
 }
 
 void MainPage::mouseReleaseEvent(QMouseEvent *event){
@@ -239,3 +249,76 @@ void MainPage::on_endSession_clicked()
         }
     }
 }
+
+void MainPage::on_search_textChanged(const QString &arg1)
+{
+    auto searchText = arg1;
+
+    if (searchText.isEmpty()) {
+        for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+            for (int column = 0; column < ui->tableWidget->columnCount(); ++column) {
+                QTableWidgetItem *item = ui->tableWidget->item(row, column);
+
+                if (item) {
+                    item->setBackground(Qt::white);
+                }
+            }
+        }
+
+        ui->tableWidget->clearSelection();
+        ui->sessionInfo->clear();
+        ui->startSession->setEnabled(false);
+        ui->endSession->setEnabled(false);
+
+        return;
+    }
+
+    bool found = false;
+
+    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+        for (int column = 0; column < ui->tableWidget->columnCount(); ++column) {
+            QTableWidgetItem *item = ui->tableWidget->item(row, column);
+            if (item && item->text().contains(searchText, Qt::CaseInsensitive)) {
+                item->setBackground(Qt::yellow);
+                on_tableWidget_cellClicked(row,column);
+                found = true;
+
+            } else {
+                if (item) {
+                    item->setBackground(Qt::white);
+                }
+            }
+        }
+    }
+
+    if(!found){
+
+        ui->tableWidget->clearSelection();
+        ui->sessionInfo->clear();
+        ui->startSession->setEnabled(false);
+        ui->endSession->setEnabled(false);
+    }
+}
+
+void MainPage::on_clearButton_clicked()
+{
+    ui->search->clear();
+}
+
+
+void MainPage::on_tariff_activated(int index)
+{
+    auto searchText = ui->tariff->currentText();
+
+    on_search_textChanged(searchText);
+
+}
+
+
+void MainPage::on_status_activated(int index)
+{
+    auto searchText = ui->status->currentText();
+
+    on_search_textChanged(searchText);
+}
+
